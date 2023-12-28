@@ -85,7 +85,9 @@ go  install  github.com/ahelmy/xdev@latest
 
 if `go/bin` is not in your path, either add it or use `~/go/bin`
 
-  
+```shell
+xdev -h
+```
 
 ## Features
 
@@ -110,6 +112,8 @@ List of features:
 **Next**
 
 - [ ] JWT encoding
+
+- [ ] Password generator
 
 - [ ] JSON to Yaml
 
