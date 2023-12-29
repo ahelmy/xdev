@@ -19,7 +19,7 @@ func TestGeneratePassword(t *testing.T) {
 	password2 := GeneratePassword(10, true, true, true)
 	fmt.Print(password2)
 	if len(password2) != 10 || !strings.ContainsAny(password2, upperLetterChars) || !strings.ContainsAny(password2, numberChars) || !strings.ContainsAny(password2, specialChars) {
-		t.Errorf("Expected password length to be 12, including special characters, numeric characters, and capital letters. but got %d", len(password2))
+		t.Errorf("Expected password length to be 10, including special characters, numeric characters, and capital letters. but got %d", len(password2))
 	}
 
 	// Test case 3: Generate password with length 6, without special characters and numeric characters
