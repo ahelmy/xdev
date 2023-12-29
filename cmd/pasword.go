@@ -11,17 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var OFF = [4]string{"false", "off", "0", "no"}
-
-func isOff(s string) bool {
-	for _, v := range OFF {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
-
 // paswordCmd represents the pasword command
 var passwordCmd = &cobra.Command{
 	Use:     "password",
@@ -35,7 +24,7 @@ var passwordCmd = &cobra.Command{
 	pwd -l 20
 	Output: 5b@e4F2a1#qqwweerrt
 	
-	pwd -l 20 -e false
+	pwd -l 20 -e=false
 	Output: 5b3e4F2a12qqwweerrt`,
 	Run: func(cmd *cobra.Command, args []string) {
 		lengthStr := cmd.Flag("length").Value.String()
@@ -43,11 +32,19 @@ var passwordCmd = &cobra.Command{
 		if err != nil {
 			length = 10
 		}
-		fmt.Println(internal.GeneratePassword(
-			length,
-			isOff(cmd.Flag("espcial").Value.String()),
-			isOff(cmd.Flag("numeric").Value.String()),
-			isOff(cmd.Flag("capital").Value.String())))
+		espcial, err := cmd.Flags().GetBool("espcial")
+		if err != nil {
+			espcial = true
+		}
+		numeric, err := cmd.Flags().GetBool("numeric")
+		if err != nil {
+			numeric = true
+		}
+		capital, err := cmd.Flags().GetBool("capital")
+		if err != nil {
+			capital = true
+		}
+		fmt.Println(internal.GeneratePassword(length, espcial, numeric, capital))
 	},
 }
 
