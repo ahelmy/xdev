@@ -23,8 +23,8 @@ func isOff(s string) bool {
 }
 
 // paswordCmd represents the pasword command
-var paswordCmd = &cobra.Command{
-	Use:     "pasword",
+var passwordCmd = &cobra.Command{
+	Use:     "password",
 	Aliases: []string{"pwd"},
 	Short:   "Password generator. Alias: pwd",
 	Long: `Password generator. For example:
@@ -52,11 +52,11 @@ var paswordCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(paswordCmd)
-	paswordCmd.Flags().Int32P("length", "l", 10, "Password length")
-	paswordCmd.Flags().BoolP("espcial", "e", true, "Especial characters")
-	paswordCmd.Flags().BoolP("numeric", "n", true, "Numeric characters")
-	paswordCmd.Flags().BoolP("capital", "c", true, "Capital characters")
+	rootCmd.AddCommand(passwordCmd)
+	passwordCmd.Flags().Int32P("length", "l", 10, "Password length")
+	passwordCmd.Flags().BoolP("espcial", "e", true, "Especial characters")
+	passwordCmd.Flags().BoolP("numeric", "n", true, "Numeric characters")
+	passwordCmd.Flags().BoolP("capital", "c", true, "Capital characters")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
