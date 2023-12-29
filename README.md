@@ -107,13 +107,11 @@ List of features:
 
 - [X] JSON minifying
 
-  
+- [X] Password generator  
 
 **Next**
 
 - [ ] JWT encoding
-
-- [ ] Password generator
 
 - [ ] JSON to Yaml
 
