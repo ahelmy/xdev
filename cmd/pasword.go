@@ -24,8 +24,9 @@ func isOff(s string) bool {
 
 // paswordCmd represents the pasword command
 var paswordCmd = &cobra.Command{
-	Use:   "pasword",
-	Short: "Password generator. Alias: pwd",
+	Use:     "pasword",
+	Aliases: []string{"pwd"},
+	Short:   "Password generator. Alias: pwd",
 	Long: `Password generator. For example:
 	
 	pwd
