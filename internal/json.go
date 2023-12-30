@@ -3,6 +3,9 @@ package internal
 import (
 	"bytes"
 	"encoding/json"
+	"strings"
+
+	"github.com/itchyny/json2yaml"
 )
 
 func IndentJSON(input string) (string, error) {
@@ -27,4 +30,13 @@ func MinifyJSON(input string) (string, error) {
 	}
 
 	return minifiedBuffer.String(), nil
+}
+
+func Json2Yaml(json string) (string, error) {
+	input := strings.NewReader(json)
+	var output strings.Builder
+	if err := json2yaml.Convert(&output, input); err != nil {
+		return "", err
+	}
+	return output.String(), nil
 }
