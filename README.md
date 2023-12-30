@@ -110,11 +110,10 @@ List of features:
 
 - [X] Password generator  
 
+- [X] JSON to Yaml
 **Next**
 
 - [ ] JWT encoding
-
-- [ ] JSON to Yaml
 
 - [ ] Yaml to JSON
 
