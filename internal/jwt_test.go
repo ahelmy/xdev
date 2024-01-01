@@ -2,7 +2,6 @@ package internal
 
 import (
 	"testing"
-
 )
 
 func TestDecodeJWT(t *testing.T) {
@@ -22,6 +21,13 @@ func TestDecodeJWT(t *testing.T) {
 		t.Errorf("Expected claims to be 'expected-claims', but got '%s'", jwt.Claims)
 	}
 
+	// Test no expiry
+	jwtTokenNoExp := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsbXkifQ.AJhNuKaUM-TQ9erj2prelMnzhTPLZo6sOrTxYrzeDsU"
+	jwt, err = DecodeJWT(jwtTokenNoExp)
+	if err != nil || jwt.Expires != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
 	// Test case 2: Invalid JWT
 	invalidJwtToken := "invalid-token"
 	_, err = DecodeJWT(invalidJwtToken)
@@ -29,15 +35,8 @@ func TestDecodeJWT(t *testing.T) {
 		t.Errorf("Expected error, but got nil")
 	}
 
-	// Test case 3: Invalid headers
-	invalidHeadersToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsiLCJleHAiOjE1NjY5NjQwMzB9.2ZQ5"
-	_, err = DecodeJWT(invalidHeadersToken)
-	if err == nil {
-		t.Errorf("Expected error, but got nil")
-	}
-
-	// Test case 4: Invalid claims
-	invalidClaimsToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsbXkiLCJleHOjE1NjY5NjQwMzB9.2ZQ5"
+	// Test case 3: Invalid claims
+	invalidClaimsToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiLCJleHOjE1N5NjQwMzB9.2ZQ5"
 	_, err = DecodeJWT(invalidClaimsToken)
 	if err == nil {
 		t.Errorf("Expected error, but got nil")

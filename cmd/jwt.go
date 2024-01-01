@@ -34,6 +34,7 @@ var jwtCmd = &cobra.Command{
 			fmt.Println("Header: \n", jwt.Header)
 			fmt.Println("Payload: \n", jwt.Claims)
 			fmt.Println("Signature: \n", jwt.Signature)
+			fmt.Println("Expires at: ", jwt.Expires)
 		} else {
 			fmt.Println("Not implemented yet")
 		}

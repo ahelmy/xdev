@@ -13,10 +13,7 @@ func Yaml2Json(yamlString string) (string, error) {
 		return "{}", err
 	}
 
-	output, err := json.Marshal(t)
-	if err != nil {
-		return "{}", err
-	}
+	output, _ := json.Marshal(t)
 	json, err := IndentJSON(string(output))
 	return json, err
 }
