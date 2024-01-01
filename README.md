@@ -118,6 +118,9 @@ List of features:
 
 - [ ] Yaml to JSON
 
+- [ ] URL encoding
+
+- [ ] URL decoding 
 ...
 
   
@@ -126,7 +129,7 @@ List of features:
 
   
 
-If you are interested to fix an issue or add new feature, you can just open a pull request.
+If you are interested to fix an issue or to add new feature, you can just open a pull request.
 
   
 
