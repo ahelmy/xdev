@@ -127,11 +127,14 @@ List of features:
 
 ## Contributing
 
-  
 
 If you are interested to fix an issue or to add new feature, you can just open a pull request.
 
-  
+### Contributors
+<a href = "https://github.com/ahelmy/xdev/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=ahelmy/xdev"/>
+</a>
+
 
 ## License
 
