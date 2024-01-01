@@ -2,6 +2,7 @@ package internal
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	jwt "github.com/golang-jwt/jwt/v5"
@@ -26,7 +27,7 @@ func DecodeJWT(jwtToken string) (JWT, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
 		log.Println("Error decoding claims")
-		return JWT{}, err
+		return JWT{}, fmt.Errorf("error decoding claims")
 	}
 	claimsJSON, err := json.MarshalIndent(claims, "", "    ")
 	if err != nil {
