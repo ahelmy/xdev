@@ -114,13 +114,14 @@ List of features:
 
 - [X] Yaml to JSON
 
+- [X] URL encoding
+
+- [X] URL decoding 
+
 **Next**
 
 - [ ] JWT encoding
 
-- [ ] URL encoding
-
-- [ ] URL decoding 
 ...
 
   
