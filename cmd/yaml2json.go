@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -11,33 +8,33 @@ import (
 	"github.com/ahelmy/xdev/internal"
 )
 
-// json2yamlCmd represents the json2yaml command
-var json2yamlCmd = &cobra.Command{
-	Use:     "json2yaml",
-	Aliases: []string{"j2y"},
-	Short:   "Convert JSON to YAML. Alias: j2y",
-	Long: `Convert JSON to YAML. For example:
-	
-	j2y '{"name":"ahmed","age":30}'
+// yaml2jsonCmd represents the yaml2json command
+var yaml2jsonCmd = &cobra.Command{
+	Use:     "yaml2json",
+	Aliases: []string{"y2j"},
+	Short:   "Convert YAML to JSON. Alias: y2j",
+	Long: `Convert YAML to JSON. For example:
+
+	y2j 'name: ahmed
+	age: 30'
 	Output:
-	name: ahmed
-	age: 30`,
+	{"name":"ahmed","age":30}`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Println("Please provide a JSON string.")
+			fmt.Println("Please provide a YAML string.")
 			return
 		}
-		yaml, err := internal.Json2Yaml(args[0])
+		jsonString, err := internal.Yaml2Json(args[0])
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(yaml)
+		fmt.Println(jsonString)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(json2yamlCmd)
+	rootCmd.AddCommand(yaml2jsonCmd)
 
 	// Here you will define your flags and configuration settings.
 

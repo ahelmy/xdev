@@ -112,11 +112,11 @@ List of features:
 
 - [X] JSON to Yaml
 
+- [X] Yaml to JSON
+
 **Next**
 
 - [ ] JWT encoding
-
-- [ ] Yaml to JSON
 
 - [ ] URL encoding
 
