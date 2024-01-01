@@ -31,7 +31,6 @@ func TestYaml2JSON(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := Yaml2Json(tt.yamlString)
-
 			if (err != nil) != tt.expectError {
 				t.Errorf("Unexpected error status. Got error: %v, expected error: %v", err, tt.expectError)
 			}

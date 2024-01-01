@@ -2,6 +2,7 @@ package internal
 
 import (
 	"testing"
+
 )
 
 func TestDecodeJWT(t *testing.T) {
@@ -19,5 +20,26 @@ func TestDecodeJWT(t *testing.T) {
 
 	if jwt.Claims != "{\n    \"exp\": 1566964030,\n    \"sub\": \"Ahelmy\"\n}" {
 		t.Errorf("Expected claims to be 'expected-claims', but got '%s'", jwt.Claims)
+	}
+
+	// Test case 2: Invalid JWT
+	invalidJwtToken := "invalid-token"
+	_, err = DecodeJWT(invalidJwtToken)
+	if err == nil {
+		t.Errorf("Expected error, but got nil")
+	}
+
+	// Test case 3: Invalid headers
+	invalidHeadersToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsiLCJleHAiOjE1NjY5NjQwMzB9.2ZQ5"
+	_, err = DecodeJWT(invalidHeadersToken)
+	if err == nil {
+		t.Errorf("Expected error, but got nil")
+	}
+
+	// Test case 4: Invalid claims
+	invalidClaimsToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsbXkiLCJleHOjE1NjY5NjQwMzB9.2ZQ5"
+	_, err = DecodeJWT(invalidClaimsToken)
+	if err == nil {
+		t.Errorf("Expected error, but got nil")
 	}
 }

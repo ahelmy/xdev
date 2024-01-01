@@ -17,6 +17,6 @@ func Yaml2Json(yamlString string) (string, error) {
 	if err != nil {
 		return "{}", err
 	}
-
-	return string(output), nil
+	json, err := IndentJSON(string(output))
+	return json, err
 }
