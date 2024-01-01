@@ -1,20 +1,21 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
-	internal "github.com/ahelmy/xdev/internal"
+
 	"github.com/spf13/cobra"
+
+	"github.com/ahelmy/xdev/internal"
 )
 
 // json2yamlCmd represents the json2yaml command
 var json2yamlCmd = &cobra.Command{
-	Use:   "json2yaml",
+	Use:     "json2yaml",
 	Aliases: []string{"j2y"},
-	Short: "Convert JSON to YAML. Alias: j2y",
+	Short:   "Convert JSON to YAML. Alias: j2y",
 	Long: `Convert JSON to YAML. For example:
 	
 	j2y '{"name":"ahmed","age":30}'

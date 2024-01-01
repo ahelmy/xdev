@@ -6,8 +6,9 @@ package cmd
 import (
 	"fmt"
 
-	internal "github.com/ahelmy/xdev/internal"
 	"github.com/spf13/cobra"
+
+	"github.com/ahelmy/xdev/internal"
 )
 
 // guidCmd represents the guid command

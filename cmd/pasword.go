@@ -7,8 +7,9 @@ import (
 	"fmt"
 	"strconv"
 
-	internal "github.com/ahelmy/xdev/internal"
 	"github.com/spf13/cobra"
+
+	"github.com/ahelmy/xdev/internal"
 )
 
 // paswordCmd represents the pasword command
