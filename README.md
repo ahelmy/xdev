@@ -90,6 +90,30 @@ if `go/bin` is not in your path, either add it or use `~/go/bin`
 xdev -h
 ```
 
+```shell
+Developer Swiss Army Knife tools X for anything.
+
+Usage:
+  xdev [command]
+
+Available Commands:
+  base64decoder Decode base64 string. Alias: b64d
+  base64encoder Encode string to base64. Alias: b64e
+  completion    Generate the autocompletion script for the specified shell
+  help          Help about any command
+  json          JSON indentation and minification
+  json2yaml     Convert JSON to YAML. Alias: j2y
+  jwt           Decode or encode a JWT string.
+  password      Password generator. Alias: pwd
+  uuid          Generate a uuid string
+  yaml2json     Convert YAML to JSON. Alias: y2j
+
+Flags:
+  -h, --help   help for xdev
+
+Use "xdev [command] --help" for more information about a command.
+```
+
 ## Features
 
   
