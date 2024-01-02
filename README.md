@@ -146,6 +146,8 @@ List of features:
 
 - [ ] JWT encoding
 
+- [ ] Add hashing (SHA256, MD5, ...)
+
 ...
 
   
