@@ -148,6 +148,8 @@ List of features:
 
 - [ ] Add hashing (SHA256, MD5, ...)
 
+- [ ] Add `choco`, `brew` and `linux` package managers download.
+
 ...
 
   
