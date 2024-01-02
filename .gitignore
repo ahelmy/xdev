@@ -24,3 +24,4 @@ go.work
 
 coverage.txt
 coverage.xml
+coverage.html
