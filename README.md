@@ -106,6 +106,7 @@ Available Commands:
   jwt           Decode or encode a JWT string.
   password      Password generator. Alias: pwd
   uuid          Generate a uuid string
+  ulid          Generate a ulid string
   yaml2json     Convert YAML to JSON. Alias: y2j
 
 Flags:
@@ -121,6 +122,8 @@ Use "xdev [command] --help" for more information about a command.
 List of features:
 
 - [X] UUID Generator
+
+- [X] ULID Generator
 
 - [X] JWT decoding
 
@@ -145,6 +148,8 @@ List of features:
 **Next**
 
 - [ ] JWT encoding
+
+- [ ] Yaml2Properties
 
 - [ ] Add hashing (SHA256, MD5, ...)
 
