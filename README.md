@@ -1,4 +1,4 @@
-![Xdev logo](logo-black.png)
+<img src="logo-black.png" width="128"/>
 
 # X development tools
 
