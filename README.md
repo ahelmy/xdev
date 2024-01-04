@@ -1,3 +1,4 @@
+![Xdev logo](logo-black.png)
 
 # X development tools
 
