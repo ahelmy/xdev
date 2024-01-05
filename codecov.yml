@@ -1,2 +1,2 @@
 ignore:
-	- "internal/server.go"
+- "internal/server.go"
