@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo-black.png" width="256"/>
+  <img src="logo-slogan.png" width="256"/>
 </p>
 
 # X development tools
