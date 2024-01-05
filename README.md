@@ -19,6 +19,8 @@ XDev helps with daily development tasks like formatting JSON, base64 encoding / 
 
 - [Installation](#installation)
 
+- [Development](#development)
+
 - [Usage](#usage)
 
 - [Features](#features)
@@ -71,7 +73,13 @@ go build -o xdev
 
 ```
 
-  
+## Development
+
+Requirements:
+- go >= 1.20
+- npm 8.19.3
+- react 18.2.0
+
 
 ## Usage
 
@@ -111,6 +119,7 @@ Available Commands:
   uuid          Generate a uuid string
   ulid          Generate a ulid string
   yaml2json     Convert YAML to JSON. Alias: y2j
+  server        Start webserver default port 8000. Alias: s
 
 Flags:
   -h, --help   help for xdev

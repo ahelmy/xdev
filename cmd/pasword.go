@@ -33,9 +33,9 @@ var passwordCmd = &cobra.Command{
 		if err != nil {
 			length = 10
 		}
-		espcial, err := cmd.Flags().GetBool("espcial")
+		especial, err := cmd.Flags().GetBool("especial")
 		if err != nil {
-			espcial = true
+			especial = true
 		}
 		numeric, err := cmd.Flags().GetBool("numeric")
 		if err != nil {
@@ -45,14 +45,14 @@ var passwordCmd = &cobra.Command{
 		if err != nil {
 			capital = true
 		}
-		fmt.Println(internal.GeneratePassword(length, espcial, numeric, capital))
+		fmt.Println(internal.GeneratePassword(length, especial, numeric, capital))
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(passwordCmd)
 	passwordCmd.Flags().Int32P("length", "l", 10, "Password length")
-	passwordCmd.Flags().BoolP("espcial", "e", true, "Especial characters")
+	passwordCmd.Flags().BoolP("especial", "e", true, "Especial characters")
 	passwordCmd.Flags().BoolP("numeric", "n", true, "Numeric characters")
 	passwordCmd.Flags().BoolP("capital", "c", true, "Capital characters")
 	// Here you will define your flags and configuration settings.

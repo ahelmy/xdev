@@ -1,0 +1,28 @@
+.card-link {
+    color: inherit;
+    /* Inherit the color from the parent */
+    text-decoration: none !important;
+    /* Remove underline */
+}
+
+input[type='number'] {
+    width: 80px !important;
+}
+
+.min-h-200 {
+    min-height: 200px;
+}
+textarea.form-control:focus{
+    box-shadow: none !important;
+}
+textarea.form-control {
+    border: none;
+    overflow: auto;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+
+    resize: none; /*remove the resize handle on the bottom right*/
+}
