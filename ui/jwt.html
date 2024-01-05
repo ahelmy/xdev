@@ -1,0 +1,121 @@
+<script src="/js/codemirror.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/javascript.min.js" crossorigin="anonymous"></script>
+{{template "partials/navbar" .}}
+
+<style>
+    /* Add custom CSS to disable textarea highlighting */
+    .no-outline {
+      outline: none;
+    }
+    .CodeMirror {
+        height: auto!important;
+    }
+  </style>
+<div class="container mt-5">
+    <form id="form">
+        {{.Error}}
+        <div class="row">
+            <div class="col-6">
+                <div class="card" style="height: 100%;">
+                    <div class="card-header">
+                        Encoded token
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control  no-outline" id="jwt" name="jwt" rows="30" onkeyup="this.form.submit()">{{.JWT}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Header
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-control  no-outline" id="header" rows="4">{{.Header}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Payload
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-control  no-outline" id="claims" rows="15">{{.Claims}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Signature
+                            </div>
+                            <div class="card-body">
+                                <textarea class="form-control  no-outline" id="signature" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Your custom script for copying text and showing tooltip -->
+<script>
+    $(document).ready(function () {
+        var jwt = CodeMirror.fromTextArea(document.getElementById("jwt"), {
+            mode: "javascript",
+            lineNumbers: false,
+            lineWrapping: true
+        });
+        jwt.focus();
+        jwt.on("change", function(cm, event) {
+            $("#form").submit();
+        });
+        var header = CodeMirror.fromTextArea(document.getElementById("header"), {
+            mode: "javascript",
+            lineNumbers: false,
+            lineWrapping: true
+        });
+        var claims = CodeMirror.fromTextArea(document.getElementById("claims"), {
+            mode: "javascript",
+            lineNumbers: false,
+            lineWrapping: true
+        });
+        // Initialize tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Add click event to the Copy button
+        $("#copyButton").click(function () {
+            var input = $("#pwdField")[0];
+            input.focus();
+            input.select();
+
+            navigator.clipboard
+                .writeText(input.value)
+                .then(() => {
+                    // Show tooltip for a brief period
+                    $(this).text("Copied!");
+                    $(this).tooltip("show");
+
+                    // Hide tooltip after 1.5 seconds (adjust as needed)
+                    setTimeout(function () {
+                        $("#copyButton").tooltip("hide");
+                        $("#copyButton").text("Copy Password!");
+                    }, 1500);
+                })
+                .catch(() => {
+                    alert("something went wrong");
+                });
+
+
+        });
+    });
+</script>

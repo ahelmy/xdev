@@ -1,0 +1,12 @@
+    <h2>{{.Name}}</h2>
+    <h2>{{.Email}}</h2>
+    <h1>Submit Form</h1>
+    <form action="/form" method="post">
+        <label for="inputName">Name:</label>
+        <input type="text" id="inputName" name="name" required>
+        <br>
+        <label for="inputEmail">Email:</label>
+        <input type="email" id="inputEmail" name="email" required>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>

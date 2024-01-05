@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+{{template "partials/head" .}}
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex: 1;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <header></header>
+        <main>
+            <div class="row">
+                <div class="col-12">
+                    {{embed}}
+                </div>
+            </div>
+        </main>
+        <footer>
+            {{template "partials/footer" .}}
+        </footer>
+    </div>
+</body>
+
+</html>
