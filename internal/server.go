@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	MainLayout = "layouts/main"
-
+	MainLayout   = "layouts/main"
+	BasePath     = "./ui"
 	JSONPath     = "/json"
 	YAMLPath     = "/yaml"
 	JWTPath      = "/jwt"
@@ -20,8 +20,8 @@ const (
 	Base64Path   = "/base64"
 )
 
-func newApp() *fiber.App {
-	engine := html.New("./ui", ".html")
+func newApp(basePath string) *fiber.App {
+	engine := html.New(basePath, ".html")
 
 	return fiber.New(fiber.Config{
 		Views:          engine,
@@ -31,8 +31,8 @@ func newApp() *fiber.App {
 }
 
 func StartServer(port int32) {
-	app := newApp()
-	defineResources(app)
+	app := newApp(BasePath)
+	defineResources(app, BasePath)
 	indexPage(app)
 	jsonPage(app)
 	uuidPage(app)
@@ -225,8 +225,8 @@ func base64Page(app *fiber.App) {
 	})
 }
 
-func defineResources(app *fiber.App) {
-	app.Static("/css", "./ui/css")
-	app.Static("/js", "./ui/js")
-	app.Static("/img", "./ui/img")
+func defineResources(app *fiber.App, basePath string) {
+	app.Static("/css", basePath+"/css")
+	app.Static("/js", basePath+"/js")
+	app.Static("/img", basePath+"/img")
 }
