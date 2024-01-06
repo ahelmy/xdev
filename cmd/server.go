@@ -18,7 +18,7 @@ var serverCmd = &cobra.Command{
 	server -p 8000`,
 	Run: func(cmd *cobra.Command, args []string) {
 		port, err := cmd.Flags().GetInt32("port")
-		if err != nil || port != 0 {
+		if err != nil || port == 0 {
 			port = 8000
 		}
 		internal.StartServer(port)
