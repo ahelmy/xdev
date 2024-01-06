@@ -23,6 +23,10 @@ XDev helps with daily development tasks like formatting JSON, base64 encoding / 
 
 - [Usage](#usage)
 
+- [Docker](#docker)
+
+- [Web UI](#web-ui)
+
 - [Features](#features)
 
 - [Contributing](#contributing)
@@ -115,7 +119,7 @@ Flags:
 
 Use "xdev [command] --help" for more information about a command.
 ```
-### Docker
+## Docker
 
 If you want to use `Xdev` as server running in docker container you can use https://hub.docker.com/r/ahelmy0/xdev
 
@@ -123,7 +127,7 @@ If you want to use `Xdev` as server running in docker container you can use http
 - `PORT` Server port, default: 8000
 - `VERBOSE` To enable verbose mode.
 
-### Web UI
+## Web UI
 
 <img src="screenshots/home.png" width="25%"/><img src="screenshots/uuid.png" width="25%"/><img src="screenshots/ulid.png" width="25%"/><img src="screenshots/json.png" width="25%"/><img src="screenshots/jwt.png" width="25%"/><img src="screenshots/password.png" width="25%"/><img src="screenshots/yaml.png" width="25%"/><img src="screenshots/base64.png" width="25%"/>
 
