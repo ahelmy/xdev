@@ -126,14 +126,14 @@ Use "xdev [command] --help" for more information about a command.
 
 ### Web UI
 
-<img src="screenshots/home.png" width="256"/>
-<img src="screenshots/uuid.png" width="256"/>
-<img src="screenshots/ulid.png" width="256"/>
-<img src="screenshots/json.png" width="256"/>
-<img src="screenshots/jwt.png" width="256"/>
-<img src="screenshots/password.png" width="256"/>
-<img src="screenshots/yaml.png" width="256"/>
-<img src="screenshots/base64.png" width="256"/>
+<img src="screenshots/home.png" width="25%"/>
+<img src="screenshots/uuid.png" width="25%"/>
+<img src="screenshots/ulid.png" width="25%"/>
+<img src="screenshots/json.png" width="25%"/>
+<img src="screenshots/jwt.png" width="25%"/>
+<img src="screenshots/password.png" width="25%"/>
+<img src="screenshots/yaml.png" width="25%"/>
+<img src="screenshots/base64.png" width="25%"/>
 
 ## Features
 
