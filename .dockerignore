@@ -1,0 +1,9 @@
+*
+
+!cmd
+!internal
+!server
+!go.mod
+!go.sum
+!main.go
+!entrypoint.sh

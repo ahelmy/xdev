@@ -4,7 +4,7 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/ahelmy/xdev/internal"
+	"github.com/ahelmy/xdev/server"
 	"github.com/spf13/cobra"
 )
 
@@ -21,13 +21,18 @@ var serverCmd = &cobra.Command{
 		if err != nil || port == 0 {
 			port = 8000
 		}
-		internal.StartServer(port)
+		verbose, err := cmd.Flags().GetBool("verbose")
+		if err != nil {
+			verbose = false
+		}
+		server.StartServer(port, verbose)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
 	serverCmd.Flags().Int32P("port", "p", 8000, "Server port")
+	serverCmd.Flags().BoolP("verbose", "v", false, "Verbose mode")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

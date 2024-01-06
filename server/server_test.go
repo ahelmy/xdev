@@ -1,4 +1,4 @@
-package internal
+package server
 
 import (
 	"net/http"
@@ -6,12 +6,8 @@ import (
 	"testing"
 )
 
-const (
-	BaseTestPath = "../ui"
-)
-
 func TestIndexPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	indexPage(app)
 	// Create a test request to the "/" route
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -29,7 +25,7 @@ func TestIndexPage(t *testing.T) {
 }
 
 func TestJSONPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	jsonPage(app)
 	t.Run("Test JSON Page - Beautify", func(t *testing.T) {
 		// Create a test request to the "/json" route with action=beautify and json=...
@@ -80,7 +76,7 @@ func TestJSONPage(t *testing.T) {
 	})
 }
 func TestUUIDPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	uuidPage(app)
 	// Create a test request to the "/uuid" route
 	req := httptest.NewRequest(http.MethodGet, "/uuid", nil)
@@ -98,7 +94,7 @@ func TestUUIDPage(t *testing.T) {
 }
 
 func TestULIDPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	ulidPage(app)
 	// Create a test request to the "/ulid" route
 	req := httptest.NewRequest(http.MethodGet, "/ulid", nil)
@@ -116,7 +112,7 @@ func TestULIDPage(t *testing.T) {
 }
 
 func TestPasswordPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	passwordPage(app)
 	t.Run("Test Password Page", func(t *testing.T) {
 		// Create a test request to the "/password" route
@@ -135,7 +131,7 @@ func TestPasswordPage(t *testing.T) {
 	})
 }
 func TestYAMLPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	yamlPage(app)
 	t.Run("Test YAML Page - Beautify", func(t *testing.T) {
 		// Create a test request to the "/yaml" route with action=beautify and yaml=...
@@ -187,7 +183,7 @@ func TestYAMLPage(t *testing.T) {
 }
 
 func TestJWTPage(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	jwtPage(app)
 	t.Run("Test JWT Page", func(t *testing.T) {
 		// Create a test request to the "/jwt" route with jwt=...
@@ -207,7 +203,7 @@ func TestJWTPage(t *testing.T) {
 }
 
 func TestBase64Page(t *testing.T) {
-	app := newApp(BaseTestPath)
+	app := newApp()
 	base64Page(app)
 	t.Run("Test Base64 Page - Encode", func(t *testing.T) {
 		// Create a test request to the "/base64" route with action=encode and decoded=...
@@ -243,8 +239,8 @@ func TestBase64Page(t *testing.T) {
 }
 
 func TestDefineResources(t *testing.T) {
-	app := newApp(BaseTestPath)
-	defineResources(app, "../ui")
+	app := newApp()
+	defineResources(app)
 
 	t.Run("Test Static /css", func(t *testing.T) {
 		// Create a test request to the "/css" route

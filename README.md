@@ -80,20 +80,12 @@ Requirements:
 
 ## Usage
 
-  
-
-You can use it directly by:
-
-  
-
+You can use it directly by:  
 ```shell
-
 go  install  github.com/ahelmy/xdev@latest
-
 ```
 
 if `go/bin` is not in your path, either add it or use `~/go/bin`
-
 ```shell
 xdev -h
 ```
@@ -123,14 +115,19 @@ Flags:
 
 Use "xdev [command] --help" for more information about a command.
 ```
+### Docker
+
+If you want to use `Xdev` as server running in docker container you can use https://hub.docker.com/r/ahelmy0/xdev
+
+`Environment`
+- `PORT` Server port, default: 8000
+- `VERBOSE` To enable verbose mode.
 
 ### Web UI
 
 <img src="screenshots/home.png" width="25%"/><img src="screenshots/uuid.png" width="25%"/><img src="screenshots/ulid.png" width="25%"/><img src="screenshots/json.png" width="25%"/><img src="screenshots/jwt.png" width="25%"/><img src="screenshots/password.png" width="25%"/><img src="screenshots/yaml.png" width="25%"/><img src="screenshots/base64.png" width="25%"/>
 
 ## Features
-
-  
 
 List of features:
 

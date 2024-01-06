@@ -1,4 +1,4 @@
-{{template "partials/navbar" .}}
+{{template "ui/partials/navbar" .}}
 
 <div class="container mt-5">
     <form>
@@ -7,11 +7,11 @@
                 <div class="form-group">
                     <div class="input-group">
                         <!-- Big Text Area -->
-                        <input disabled class="form-control" id="ulidField" value="{{.ULID}}">
+                        <input disabled class="form-control" id="uuidField" value="{{.UUID}}">
                         <!-- Copy Button -->
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button" id="copyButton" data-toggle="tooltip"
-                                data-placement="top" title="Copy ULID!">Copy</button>
+                                data-placement="top" title="Copy UUID!">Copy</button>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
         </div>
         <div class="row">
             <div class="text-center">
-                <button type="submit" id="submitButton" class="btn btn-primary btn-lg">Generate ULID</button>
+                <button type="submit" id="submitButton" class="btn btn-primary btn-lg">Generate UUID</button>
             </div>
         </div>
     </form>
@@ -36,7 +36,7 @@
 
         // Add click event to the Copy button
         $("#copyButton").click(function () {
-            var input = $("#uliddField")[0];
+            var input = $("#uuidField")[0];
             input.focus();
             input.select();
 
@@ -50,7 +50,7 @@
                     // Hide tooltip after 1.5 seconds (adjust as needed)
                     setTimeout(function () {
                         $("#copyButton").tooltip("hide");
-                        $("#copyButton").text("Copy ULID!");
+                        $("#copyButton").text("Copy UUID!");
                     }, 1500);
                 })
                 .catch(() => {
