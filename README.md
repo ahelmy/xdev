@@ -77,9 +77,6 @@ go build -o xdev
 
 Requirements:
 - go >= 1.20
-- npm 8.19.3
-- react 18.2.0
-
 
 ## Usage
 
@@ -126,6 +123,17 @@ Flags:
 
 Use "xdev [command] --help" for more information about a command.
 ```
+
+### Web UI
+
+<img src="screenshots/home.png" width="256"/>
+<img src="screenshots/uuid.png" width="256"/>
+<img src="screenshots/ulid.png" width="256"/>
+<img src="screenshots/json.png" width="256"/>
+<img src="screenshots/jwt.png" width="256"/>
+<img src="screenshots/password.png" width="256"/>
+<img src="screenshots/yaml.png" width="256"/>
+<img src="screenshots/base64.png" width="256"/>
 
 ## Features
 
