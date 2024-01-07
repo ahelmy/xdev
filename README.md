@@ -98,12 +98,14 @@ xdev -h
 Developer Swiss Army Knife tools X for anything.
 
 Usage:
+  xdev [flags]
   xdev [command]
 
 Available Commands:
-base64decoder Decode base64 string. Alias: b64d
+  base64decoder Decode base64 string. Alias: b64d
   base64encoder Encode string to base64. Alias: b64e
   completion    Generate the autocompletion script for the specified shell
+  hash          Hash a string
   help          Help about any command
   json          JSON indentation and minification
   json2yaml     Convert JSON to YAML. Alias: j2y
@@ -116,7 +118,8 @@ base64decoder Decode base64 string. Alias: b64d
   yaml2json     Convert YAML to JSON. Alias: y2j
 
 Flags:
-  -h, --help   help for xdev
+  -h, --help      help for xdev
+  -v, --version   Print the version number
 
 Use "xdev [command] --help" for more information about a command.
 ```

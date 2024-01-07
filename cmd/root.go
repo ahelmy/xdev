@@ -23,6 +23,8 @@ var rootCmd = &cobra.Command{
 		if versionFlag, _ := cmd.Flags().GetBool("version"); versionFlag {
 			fmt.Printf("Your App Version: %s\nCommit: %s\nBuild Date: %s\n", app.AppVersion, app.GitCommit, app.BuildTime)
 			os.Exit(0)
+		} else {
+			cmd.Help()
 		}
 	},
 }
@@ -38,7 +40,6 @@ func Execute() {
 
 func init() {
 	rootCmd.Flags().BoolP("version", "v", false, "Print the version number")
-	rootCmd.MarkFlagRequired("version")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
