@@ -35,4 +35,4 @@ jobs:
         goarch: ${{ matrix.goarch }}
         goversion: "https://dl.google.com/go/go1.20.linux-amd64.tar.gz"
         extra_files: LICENSE README.md
-        ldflags: -X "github.com/ahelmy/xdev/cmd.appVersion=${{ env.APP_VERSION }}" -X "github.com/ahelmy/xdev/cmd.buildTime=${{ env.BUILD_TIME }}" -X github.com/ahelmy/xdev/cmd.gitCommit=${{ github.sha }}
+        ldflags: -X "github.com/ahelmy/xdev/app.AppVersion=${{ env.APP_VERSION }}" -X "github.com/ahelmy/xdev/app.BuildTime=${{ env.BUILD_TIME }}" -X github.com/ahelmy/xdev/app.GitCommit=${{ github.sha }}

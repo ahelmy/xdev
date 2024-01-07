@@ -7,13 +7,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ahelmy/xdev/app"
 	"github.com/spf13/cobra"
-)
-
-var (
-	appVersion string
-	gitCommit  string
-	buildTime  string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -26,7 +21,7 @@ var rootCmd = &cobra.Command{
 	// Run: func(cmd *cobra.Command, args []string) { },
 	Run: func(cmd *cobra.Command, args []string) {
 		if versionFlag, _ := cmd.Flags().GetBool("version"); versionFlag {
-			fmt.Printf("Your App Version: %s\nCommit: %s\nBuild Date: %s\n", appVersion, gitCommit, buildTime)
+			fmt.Printf("Your App Version: %s\nCommit: %s\nBuild Date: %s\n", app.AppVersion, app.GitCommit, app.BuildTime)
 			os.Exit(0)
 		}
 	},

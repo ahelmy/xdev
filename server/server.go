@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/ahelmy/xdev/app"
 	"github.com/ahelmy/xdev/internal"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/filesystem"
@@ -49,6 +50,15 @@ func newApp() *fiber.App {
 	})
 }
 
+func newMap(fiberMap map[string]any) fiber.Map {
+	mp := fiber.Map{}
+	mp["AppVersion"] = app.AppVersion
+	for k, v := range fiberMap {
+		mp[k] = v
+	}
+	return mp
+}
+
 func StartServer(port int32, isVerbose bool) {
 	app := newApp()
 	if isVerbose {
@@ -70,9 +80,9 @@ func StartServer(port int32, isVerbose bool) {
 
 func indexPage(app *fiber.App) {
 	app.Get("/", func(c fiber.Ctx) error {
-		return c.Render(Prefix+"index", fiber.Map{
+		return c.Render(Prefix+"index", newMap(map[string]any{
 			"Title": "Hello, Xdev!",
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
@@ -101,33 +111,33 @@ func jsonPage(app *fiber.App) {
 		}
 
 		// Render index within layouts/main
-		return c.Render(Prefix+"json", fiber.Map{
+		return c.Render(Prefix+"json", newMap(map[string]any{
 			"Title":  "JSON",
 			"JSON":   c.FormValue("json"),
 			"Result": result,
 			"Error":  errorStr,
 			"action": action,
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
 func uuidPage(app *fiber.App) {
 	app.Get(UUIDPath, func(c fiber.Ctx) error {
 		// Render index within layouts/main
-		return c.Render(Prefix+"uuid", fiber.Map{
+		return c.Render(Prefix+"uuid", newMap(map[string]any{
 			"Title": "UUID Generator",
 			"UUID":  internal.GenerateGUID(),
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
 func ulidPage(app *fiber.App) {
 	app.Get(ULIDPath, func(c fiber.Ctx) error {
 		// Render index within layouts/main
-		return c.Render(Prefix+"ulid", fiber.Map{
+		return c.Render(Prefix+"ulid", newMap(map[string]any{
 			"Title": "ULID Generator",
 			"ULID":  internal.GenerateULID(),
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
@@ -154,14 +164,14 @@ func passwordPage(app *fiber.App) {
 			number = "off"
 		}
 		password := internal.GeneratePassword(length, isEspecial, isNumberic, isCapital)
-		return c.Render(Prefix+"password", fiber.Map{
+		return c.Render(Prefix+"password", newMap(map[string]any{
 			"Title":    "Password Generator",
 			"Password": password,
 			"length":   length,
 			"especial": especial,
 			"capital":  capital,
 			"number":   number,
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
@@ -187,13 +197,13 @@ func yamlPage(app *fiber.App) {
 		}
 
 		// Render index within layouts/main
-		return c.Render(Prefix+"yaml", fiber.Map{
+		return c.Render(Prefix+"yaml", newMap(map[string]any{
 			"Title":  "YAML",
 			"YAML":   c.FormValue("yaml"),
 			"Result": result,
 			"Error":  errorStr,
 			"action": action,
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
@@ -212,14 +222,14 @@ func jwtPage(app *fiber.App) {
 		}
 
 		// Render index within layouts/main
-		return c.Render(Prefix+"jwt", fiber.Map{
+		return c.Render(Prefix+"jwt", newMap(map[string]any{
 			"Title":     "JWT",
 			"JWT":       c.FormValue("jwt"),
 			"Header":    jwt.Header,
 			"Claims":    jwt.Claims,
 			"Signature": jwt.Signature,
 			"Error":     errorStr,
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
@@ -239,12 +249,12 @@ func base64Page(app *fiber.App) {
 		errorStr := ""
 
 		// Render index within layouts/main
-		return c.Render(Prefix+"base64", fiber.Map{
+		return c.Render(Prefix+"base64", newMap(map[string]any{
 			"Title":   "Base64 encode/decode",
 			"Decoded": decoded,
 			"Encoded": encoded,
 			"Error":   errorStr,
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
@@ -270,12 +280,12 @@ func urlPage(app *fiber.App) {
 		}
 
 		// Render index within layouts/main
-		return c.Render(Prefix+"url", fiber.Map{
+		return c.Render(Prefix+"url", newMap(map[string]any{
 			"Title":   "URL encode/decode",
 			"Decoded": decoded,
 			"Encoded": encoded,
 			"Error":   errorStr,
-		}, MainLayout)
+		}), MainLayout)
 	})
 }
 
