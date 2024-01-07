@@ -4,9 +4,16 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+)
+
+var (
+	appVersion string
+	gitCommit  string
+	buildTime  string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -17,6 +24,12 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		if versionFlag, _ := cmd.Flags().GetBool("version"); versionFlag {
+			fmt.Printf("Your App Version: %s\nCommit: %s\nBuild Date: %s\n", appVersion, gitCommit, buildTime)
+			os.Exit(0)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -29,6 +42,8 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().BoolP("version", "v", false, "Print the version number")
+	rootCmd.MarkFlagRequired("version")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
