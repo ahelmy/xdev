@@ -25,6 +25,7 @@ const (
 	ULIDPath     = "/ulid"
 	PasswordPath = "/password"
 	Base64Path   = "/base64"
+	URLPath      = "/url"
 )
 
 //go:embed ui/*
@@ -62,6 +63,7 @@ func StartServer(port int32, isVerbose bool) {
 	yamlPage(app)
 	jwtPage(app)
 	base64Page(app)
+	urlPage(app)
 
 	log.Fatal(app.Listen(":"+strconv.FormatInt(int64(port), 10), fiber.ListenConfig{EnablePrefork: true}))
 }
@@ -239,6 +241,37 @@ func base64Page(app *fiber.App) {
 		// Render index within layouts/main
 		return c.Render(Prefix+"base64", fiber.Map{
 			"Title":   "Base64 encode/decode",
+			"Decoded": decoded,
+			"Encoded": encoded,
+			"Error":   errorStr,
+		}, MainLayout)
+	})
+}
+
+func urlPage(app *fiber.App) {
+	app.Get(URLPath, func(c fiber.Ctx) error {
+		action := c.FormValue("action")
+
+		decoded := ""
+		encoded := ""
+		errorStr := ""
+
+		if action == "encode" {
+			encoded = internal.EncodeURL(c.FormValue("decoded"))
+			decoded = c.FormValue("decoded")
+		} else if action == "decode" {
+			_decoded, err := internal.DecodeURL(c.FormValue("encoded"))
+			if err != nil {
+				errorStr = err.Error()
+			} else {
+				decoded = _decoded
+			}
+			encoded = c.FormValue("encoded")
+		}
+
+		// Render index within layouts/main
+		return c.Render(Prefix+"url", fiber.Map{
+			"Title":   "URL encode/decode",
 			"Decoded": decoded,
 			"Encoded": encoded,
 			"Error":   errorStr,

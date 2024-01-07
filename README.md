@@ -101,7 +101,7 @@ Usage:
   xdev [command]
 
 Available Commands:
-  base64decoder Decode base64 string. Alias: b64d
+base64decoder Decode base64 string. Alias: b64d
   base64encoder Encode string to base64. Alias: b64e
   completion    Generate the autocompletion script for the specified shell
   help          Help about any command
@@ -109,10 +109,11 @@ Available Commands:
   json2yaml     Convert JSON to YAML. Alias: j2y
   jwt           Decode or encode a JWT string.
   password      Password generator. Alias: pwd
-  uuid          Generate a uuid string
+  server        Start a web server, Alias: s
   ulid          Generate a ulid string
+  url           URL encode/decode.
+  uuid          Generate a uuid string
   yaml2json     Convert YAML to JSON. Alias: y2j
-  server        Start webserver default port 8000. Alias: s
 
 Flags:
   -h, --help   help for xdev

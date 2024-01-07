@@ -290,3 +290,40 @@ func TestDefineResources(t *testing.T) {
 		// TODO: Add assertions for the response body or other expectations
 	})
 }
+
+func TestURLPage(t *testing.T) {
+	app := newApp()
+	urlPage(app)
+
+	t.Run("Test URL Page - Encode", func(t *testing.T) {
+		// Create a test request to the "/url" route with action=encode and decoded=...
+		req := httptest.NewRequest(http.MethodGet, "/url?action=encode&decoded=...", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test URL Page - Decode", func(t *testing.T) {
+		// Create a test request to the "/url" route with action=decode and encoded=...
+		req := httptest.NewRequest(http.MethodGet, "/url?action=decode&encoded=...", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+}

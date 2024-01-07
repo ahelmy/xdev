@@ -1,0 +1,84 @@
+{{template "ui/partials/navbar" .}}
+
+<div class="container mt-5">
+    <form id="form">
+        {{.Error}}
+        <div class="row">
+            <div class="col-11">
+                <div class="card" style="height: 100%;">
+                    <div class="card-header">
+                        Encoded URL
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control  no-outline" id="encoded" name="encoded"
+                            rows="6">{{.Encoded}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 align-self-center">
+                    <button type="button" class="btn btn-primary btn-block"
+                        onclick="submitForm('decode')">Decode</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-11">
+                <div class="card" style="height: 100%;">
+                    <div class="card-header">
+                        Decoded URL string
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control  no-outline" id="decoded" name="decoded"
+                            rows="6">{{.Decoded}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 align-self-center">
+                <button type="button" class="btn btn-primary btn-block"
+                onclick="submitForm('encode')">Encode</button>
+            </div>
+        </div>
+        <input type="hidden" name="action" id="action" value="">
+    </form>
+</div>
+
+<!-- Your custom script for copying text and showing tooltip -->
+<script>
+    function submitForm(action) {
+        $("#action").val(action);
+        $("#form").submit();
+    }
+    $(document).ready(function () {
+
+        // Initialize tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Add click event to the Copy button
+        $("#copyButton").click(function () {
+            var input = $("#pwdField")[0];
+            input.focus();
+            input.select();
+
+            navigator.clipboard
+                .writeText(input.value)
+                .then(() => {
+                    // Show tooltip for a brief period
+                    $(this).text("Copied!");
+                    $(this).tooltip("show");
+
+                    // Hide tooltip after 1.5 seconds (adjust as needed)
+                    setTimeout(function () {
+                        $("#copyButton").tooltip("hide");
+                        $("#copyButton").text("Copy Password!");
+                    }, 1500);
+                })
+                .catch(() => {
+                    alert("something went wrong");
+                });
+
+
+        });
+    });
+</script>
