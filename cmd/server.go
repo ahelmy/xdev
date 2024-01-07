@@ -4,7 +4,7 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/ahelmy/xdev/server"
+	server "github.com/ahelmy/xdev/server"
 	"github.com/spf13/cobra"
 )
 

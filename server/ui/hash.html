@@ -1,0 +1,92 @@
+{{template "ui/partials/navbar" .}}
+
+<div class="container mt-5">
+    <form id="form">
+        {{.Error}}
+        <div class="row">
+            <div class="col-10">
+                <div class="card" style="height: 100%;">
+                    <div class="card-header">
+                        Clear String
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control  no-outline" id="string" name="string"
+                            rows="6">{{.String}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 align-self-center">
+                <div class="row g-2">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('md5')">MD5</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('sha256')">SHA256</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('sha512')">SHA512</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('salt')">Salt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card" style="height: 100%;">
+                    <div class="card-header">
+                        Hashed String
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control  no-outline" id="hashed" name="hashed"
+                            rows="6">{{.Result}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="action" id="action" value="">
+    </form>
+</div>
+
+<!-- Your custom script for copying text and showing tooltip -->
+<script>
+    function submitForm(action) {
+        $("#action").val(action);
+        $("#form").submit();
+    }
+    $(document).ready(function () {
+
+        // Initialize tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Add click event to the Copy button
+        $("#copyButton").click(function () {
+            var input = $("#pwdField")[0];
+            input.focus();
+            input.select();
+
+            navigator.clipboard
+                .writeText(input.value)
+                .then(() => {
+                    // Show tooltip for a brief period
+                    $(this).text("Copied!");
+                    $(this).tooltip("show");
+
+                    // Hide tooltip after 1.5 seconds (adjust as needed)
+                    setTimeout(function () {
+                        $("#copyButton").tooltip("hide");
+                        $("#copyButton").text("Copy Password!");
+                    }, 1500);
+                })
+                .catch(() => {
+                    alert("something went wrong");
+                });
+
+
+        });
+    });
+</script>

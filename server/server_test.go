@@ -29,7 +29,7 @@ func TestJSONPage(t *testing.T) {
 	jsonPage(app)
 	t.Run("Test JSON Page - Beautify", func(t *testing.T) {
 		// Create a test request to the "/json" route with action=beautify and json=...
-		req := httptest.NewRequest(http.MethodGet, "/json?action=beautify&json=...", nil)
+		req := httptest.NewRequest(http.MethodGet, "/json?action=beautify&json={}", nil)
 		resp, err := app.Test(req)
 		if err != nil {
 			t.Fatalf("Failed to send test request: %v", err)
@@ -116,7 +116,7 @@ func TestPasswordPage(t *testing.T) {
 	passwordPage(app)
 	t.Run("Test Password Page", func(t *testing.T) {
 		// Create a test request to the "/password" route
-		req := httptest.NewRequest(http.MethodGet, "/password", nil)
+		req := httptest.NewRequest(http.MethodGet, "/password?length=x", nil)
 		resp, err := app.Test(req)
 		if err != nil {
 			t.Fatalf("Failed to send test request: %v", err)
@@ -135,7 +135,7 @@ func TestYAMLPage(t *testing.T) {
 	yamlPage(app)
 	t.Run("Test YAML Page - Beautify", func(t *testing.T) {
 		// Create a test request to the "/yaml" route with action=beautify and yaml=...
-		req := httptest.NewRequest(http.MethodGet, "/yaml?action=beautify&yaml=...", nil)
+		req := httptest.NewRequest(http.MethodGet, "/yaml?yaml=name%3A+ali&action=yaml2JSON", nil)
 		resp, err := app.Test(req)
 		if err != nil {
 			t.Fatalf("Failed to send test request: %v", err)
@@ -187,8 +187,19 @@ func TestJWTPage(t *testing.T) {
 	jwtPage(app)
 	t.Run("Test JWT Page", func(t *testing.T) {
 		// Create a test request to the "/jwt" route with jwt=...
-		req := httptest.NewRequest(http.MethodGet, "/jwt?jwt=...", nil)
+		req := httptest.NewRequest(http.MethodGet, "/jwt?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", nil)
 		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		req = httptest.NewRequest(http.MethodGet, "/jwt?jwt=xyz", nil)
+		resp, err = app.Test(req)
 		if err != nil {
 			t.Fatalf("Failed to send test request: %v", err)
 		}
@@ -308,6 +319,17 @@ func TestURLPage(t *testing.T) {
 			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
 		}
 
+		req = httptest.NewRequest(http.MethodGet, "/url?encoded=h%234dsqd%252z&decoded=h%234dsqd%2Cm&action=decode", nil)
+		resp, err = app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
 		// TODO: Add assertions for the response body or other expectations
 	})
 
@@ -325,5 +347,52 @@ func TestURLPage(t *testing.T) {
 		}
 
 		// TODO: Add assertions for the response body or other expectations
+	})
+}
+
+func TestHashPage(t *testing.T) {
+	app := newApp()
+	hashPage(app)
+
+	t.Run("Test Hash Page - Empty String", func(t *testing.T) {
+		// Create a test request to the "/hash" route with empty string
+		req := httptest.NewRequest(http.MethodGet, "/hash?action=salt&string=xyz", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Hash Page - Failure String", func(t *testing.T) {
+		// Create a test request to the "/hash" route with non-empty string
+		req := httptest.NewRequest(http.MethodGet, "/hash?string=%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG%242a%2410%242dIj%2FVAy0Zhgy6eaNYjfAubIbyP5z2V7e8Qzhyr%2Fxeo56GtQ22kOG&hashed=&action=salt", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+}
+
+func TestStartServer(t *testing.T) {
+	t.Run("Test Start server", func(t *testing.T) {
+		go StartServer(7000, false)
+	})
+
+	t.Run("Test Start server - verbose", func(t *testing.T) {
+		go StartServer(7000, true)
 	})
 }

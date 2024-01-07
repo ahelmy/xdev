@@ -27,6 +27,7 @@ const (
 	PasswordPath = "/password"
 	Base64Path   = "/base64"
 	URLPath      = "/url"
+	HashPath     = "/hash"
 )
 
 //go:embed ui/*
@@ -74,6 +75,7 @@ func StartServer(port int32, isVerbose bool) {
 	jwtPage(app)
 	base64Page(app)
 	urlPage(app)
+	hashPage(app)
 
 	log.Fatal(app.Listen(":"+strconv.FormatInt(int64(port), 10), fiber.ListenConfig{EnablePrefork: true}))
 }
@@ -182,11 +184,7 @@ func yamlPage(app *fiber.App) {
 		yaml := c.FormValue("yaml")
 		result := ""
 		if len(yaml) > 0 {
-			if action == "beautify" {
-				errorStr = "Not implemented yet"
-			} else if action == "minify" {
-				errorStr = "Not implemented yet"
-			} else if action == "yaml2JSON" {
+			if action == "yaml2JSON" {
 				_yaml, err := internal.Yaml2Json(yaml)
 				if err != nil {
 					errorStr = err.Error()
@@ -285,6 +283,32 @@ func urlPage(app *fiber.App) {
 			"Decoded": decoded,
 			"Encoded": encoded,
 			"Error":   errorStr,
+		}), MainLayout)
+	})
+}
+
+func hashPage(app *fiber.App) {
+	app.Get(HashPath, func(c fiber.Ctx) error {
+		algorithm := c.FormValue("action")
+
+		str := c.FormValue("string")
+		result := ""
+		errorStr := ""
+		if len(str) > 0 {
+			_result, err := internal.HashString(str, algorithm)
+			if err != nil {
+				errorStr = err.Error()
+			} else {
+				result = _result
+			}
+		}
+
+		// Render index within layouts/main
+		return c.Render(Prefix+"hash", newMap(map[string]any{
+			"Title":  "Hashing",
+			"String": str,
+			"Result": result,
+			"Error":  errorStr,
 		}), MainLayout)
 	})
 }
