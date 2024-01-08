@@ -163,13 +163,13 @@ List of features:
 
 - [X] URL decoding 
 
+- [X] Add hashing (SHA256, MD5, ...)
+
 **Next**
 
 - [ ] JWT encoding
 
 - [ ] Yaml2Properties
-
-- [ ] Add hashing (SHA256, MD5, ...)
 
 - [ ] Add `choco`, `brew` and `linux` package managers download.
 
