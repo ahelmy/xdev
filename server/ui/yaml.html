@@ -1,6 +1,11 @@
 <script src="/js/codemirror.min.js" crossorigin="anonymous"></script>
 <script src="/js/codemirror/javascript.min.js" crossorigin="anonymous"></script>
 <script src="/js/codemirror/yaml.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/indent-fold.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/brace-fold.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/foldcode.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/foldgutter.min.js" crossorigin="anonymous"></script>
+<link href="/css/foldgutter.min.css" rel="stylesheet" crossorigin="anonymous">
 {{template "ui/partials/navbar" .}}
 
 <style>
@@ -71,13 +76,17 @@
     }
     $(document).ready(function () {
         var yaml = CodeMirror.fromTextArea(document.getElementById("yaml"), {
-            mode: "javascript",
-            lineNumbers: false,
+            mode: "text/yaml",
+            lineNumbers: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      foldGutter: true,
             lineWrapping: true
         });
         var result = CodeMirror.fromTextArea(document.getElementById("result"), {
             mode: $("#action").val() =="yaml2JSON" ? "javascript": "text/yaml",
-            lineNumbers: false,
+            lineNumbers: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      foldGutter: true,
             lineWrapping: true
         });
         // Initialize tooltip
