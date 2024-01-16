@@ -139,19 +139,13 @@ If you want to use `Xdev` as server running in docker container you can use http
 
 List of features:
 
-- [X] UUID Generator
+- [X] UUID, ULID Generator
 
-- [X] ULID Generator
+- [X] JWT encoding / decoding
 
-- [X] JWT decoding
+- [X] Base64 encoding / decoding
 
-- [X] Base64 encoding
-
-- [X] Base64 decoding
-
-- [X] JSON indention
-
-- [X] JSON minifying
+- [X] JSON indention / minifying
 
 - [X] Password generator  
 
@@ -159,15 +153,11 @@ List of features:
 
 - [X] Yaml to JSON
 
-- [X] URL encoding
-
-- [X] URL decoding 
+- [X] URL encoding / decoding
 
 - [X] Add hashing (SHA256, MD5, ...)
 
 **Next**
-
-- [ ] JWT encoding
 
 - [ ] Yaml2Properties
 
