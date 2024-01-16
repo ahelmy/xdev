@@ -5,15 +5,27 @@
 <style>
     /* Add custom CSS to disable textarea highlighting */
     .no-outline {
-      outline: none;
+        outline: none;
     }
+
     .CodeMirror {
-        height: auto!important;
+        height: auto !important;
     }
-  </style>
+</style>
 <div class="container mt-5">
     <form id="form">
         {{.Error}}
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <button type="button" style="width: 100%;" class="btn btn-primary btn-block" onclick="submitForm('decode')">Decode</button>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <button type="button" style="width: 100%;" class="btn btn-primary btn-block" onclick="submitForm('encode')">Encode</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" style="height: 1px;"></div>
+        </div>
         <div class="row">
             <div class="col-md-6 col-sm-12">
                 <div class="card" style="height: 100%;">
@@ -21,7 +33,7 @@
                         Encoded token
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control  no-outline" id="jwt" name="jwt" rows="30" onkeyup="this.form.submit()">{{.JWT}}</textarea>
+                        <textarea class="form-control  no-outline" id="jwt" name="jwt" rows="30">{{.JWT}}</textarea>
                     </div>
                 </div>
             </div>
@@ -33,7 +45,7 @@
                                 Header
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="header" rows="4">{{.Header}}</textarea>
+                                <textarea class="form-control  no-outline" id="header" name="header" rows="4">{{.Header}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -45,7 +57,7 @@
                                 Payload
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="claims" rows="15">{{.Claims}}</textarea>
+                                <textarea class="form-control  no-outline" id="claims" name="claims" rows="15">{{.Claims}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -54,21 +66,27 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                Signature
+                                Secret
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="signature" rows="4"></textarea>
+                                <textarea class="form-control  no-outline" id="secret" name="secret" rows="4">{{.Secret}}</textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <input type="hidden" name="action" id="action" value="{{.action}}">
     </form>
 </div>
 
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
+    function submitForm(action) {
+        $("#action").val(action);
+        $("#form").submit();
+    }
+
     $(document).ready(function () {
         var jwt = CodeMirror.fromTextArea(document.getElementById("jwt"), {
             mode: "javascript",
@@ -76,9 +94,7 @@
             lineWrapping: true
         });
         jwt.focus();
-        jwt.on("change", function(cm, event) {
-            $("#form").submit();
-        });
+
         var header = CodeMirror.fromTextArea(document.getElementById("header"), {
             mode: "javascript",
             lineNumbers: false,

@@ -18,32 +18,41 @@ var jwtCmd = &cobra.Command{
 	Short:   "Decode or encode a JWT string.",
 	Long: `Decode or encode a JWT string. For example:
 	
-	jwt "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsbXkiLCJleHAiOjE1NjY5NjQwMzB9.2ZQ5.
-	jwt {header} {payload} {secret}`,
+	jwt "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsbXkiLCJleHAiOjE1NjY5NjQwMzB9.2ZQ5"
+	jwt -a HS256 -c '{"name":"ali"}' -s 123`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			fmt.Println("Please provide a JWT string to decode")
-			return
-		}
-		if args[0][0] == 'e' {
+		if len(args) == 1 && args[0][0] == 'e' {
 			jwt, err := internal.DecodeJWT(args[0])
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
-			fmt.Println("Header: \n", jwt.Header)
-			fmt.Println("Payload: \n", jwt.Claims)
-			fmt.Println("Signature: \n", jwt.Signature)
-			fmt.Println("Expires at: ", jwt.Expires)
+			fmt.Println("Header:\n", jwt.Header)
+			fmt.Println("Payload:\n", jwt.Claims)
+			expiry := "Never"
+			if jwt.Expires != nil {
+				expiry = jwt.Expires.String()
+			}
+			fmt.Println("Expires at: ", expiry)
 		} else {
-			fmt.Println("Not implemented yet")
+			algorithm := cmd.Flag("algorithm").Value.String()
+			claims := cmd.Flag("claims").Value.String()
+			secret := cmd.Flag("secret").Value.String()
+			jwt, err := internal.EncodeJWT(algorithm, claims, secret)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println(jwt)
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(jwtCmd)
-
+	jwtCmd.Flags().StringP("algorithm", "a", "HS256", "The algorithm to use for signing the JWT")
+	jwtCmd.Flags().StringP("claims", "c", "{}", "The claims to encode in the JWT")
+	jwtCmd.Flags().StringP("secret", "s", "", "The secret to use for signing the JWT")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
