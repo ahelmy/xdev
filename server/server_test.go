@@ -209,6 +209,18 @@ func TestJWTPage(t *testing.T) {
 			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
 		}
 
+		t.Run("Test JWT Page - Encode", func(t *testing.T) {
+			// Create a test request to the "/jwt" route with action=encode, header=..., claims=..., and secret=...
+			req := httptest.NewRequest(http.MethodGet, `/jwt?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjEyMzEyNDIzNCwibmFtZSI6ImFsaSIsInRlc3QiOiJvayJ9.eNNcYKrS7WqMTh6TPwSY4508nsLz5CtrxCkOr_tTbpU&header=%7B%0D%0A++++"alg"%3A+"HS256"%2C%0D%0A++++"typ"%3A+"JWT"%0D%0A%7D&claims=%7B"sub"%3A+"1234567890"%2C+"name"%3A+"John+Doe"%2C+"iat"%3A+1516239022%7D&secret=my-secret-key&action=encode`, nil)
+			_, err := app.Test(req)
+			if err != nil {
+				t.Fatalf("Failed to send test request: %v", err)
+			}
+			if resp.StatusCode != http.StatusOK {
+				t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+			}
+			// TODO: Add assertions for the response body or other expectations
+		})
 		// TODO: Add assertions for the response body or other expectations
 	})
 }

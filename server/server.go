@@ -2,6 +2,7 @@ package server
 
 import (
 	"embed"
+	"encoding/json"
 	"io/fs"
 	"log"
 	"net/http"
@@ -207,26 +208,46 @@ func yamlPage(app *fiber.App) {
 
 func jwtPage(app *fiber.App) {
 	app.Get(JWTPath, func(c fiber.Ctx) error {
+		action := c.FormValue("action")
+		header := c.FormValue("header")
+		claims := c.FormValue("claims")
+		secret := c.FormValue("secret")
 		jwtToken := c.FormValue("jwt")
 		jwt := internal.JWT{}
 		errorStr := ""
-		if len(jwtToken) > 0 {
-			_jwt, err := internal.DecodeJWT(c.FormValue("jwt"))
+		if action == "decode" {
+			_jwt, err := internal.DecodeJWT(jwtToken)
 			if err != nil {
 				errorStr = err.Error()
 			} else {
 				jwt = _jwt
 			}
+		} else if action == "encode" {
+			algorithm := "HS256"
+			// parse header
+			headerJson := map[string]string{}
+			json.Unmarshal([]byte(header), &headerJson)
+			if header != "" || headerJson["alg"] != "" {
+				algorithm = headerJson["alg"]
+			}
+			_jwt, err := internal.EncodeJWT(algorithm, claims, secret)
+			if err != nil {
+				errorStr = err.Error()
+			} else {
+				jwtToken = _jwt
+				jwt.Header, _ = internal.IndentJSON(header)
+				jwt.Claims, _ = internal.IndentJSON(claims)
+			}
 		}
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"jwt", newMap(map[string]any{
-			"Title":     "JWT",
-			"JWT":       c.FormValue("jwt"),
-			"Header":    jwt.Header,
-			"Claims":    jwt.Claims,
-			"Signature": jwt.Signature,
-			"Error":     errorStr,
+			"Title":  "JWT",
+			"JWT":    jwtToken,
+			"Header": jwt.Header,
+			"Claims": jwt.Claims,
+			"Secret": secret,
+			"Error":  errorStr,
 		}), MainLayout)
 	})
 }
