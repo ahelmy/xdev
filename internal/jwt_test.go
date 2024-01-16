@@ -62,4 +62,9 @@ func TestEncodeJWT(t *testing.T) {
 	if err == nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
+
+	_, err = EncodeJWT("HS256", `{"invalid`, signature)
+	if err == nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
 }
