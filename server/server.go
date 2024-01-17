@@ -48,7 +48,7 @@ func newApp() *fiber.App {
 
 	return fiber.New(fiber.Config{
 		Views:          engine,
-		ReadBufferSize: 4096 * 3,
+		ReadBufferSize: 4096 * 3000,
 	})
 }
 
