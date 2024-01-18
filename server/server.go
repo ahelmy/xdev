@@ -118,7 +118,7 @@ func jsonPage(app *fiber.App) {
 			"Title":  "JSON",
 			"JSON":   c.FormValue("json"),
 			"Result": result,
-			"Error":  errorStr,
+			"AlertMessage":  errorStr,
 			"action": action,
 		}), MainLayout)
 	})
@@ -200,7 +200,7 @@ func yamlPage(app *fiber.App) {
 			"Title":  "YAML",
 			"YAML":   c.FormValue("yaml"),
 			"Result": result,
-			"Error":  errorStr,
+			"AlertMessage":  errorStr,
 			"action": action,
 		}), MainLayout)
 	})
@@ -247,7 +247,7 @@ func jwtPage(app *fiber.App) {
 			"Header": jwt.Header,
 			"Claims": jwt.Claims,
 			"Secret": secret,
-			"Error":  errorStr,
+			"AlertMessage":  errorStr,
 		}), MainLayout)
 	})
 }
@@ -272,7 +272,7 @@ func base64Page(app *fiber.App) {
 			"Title":   "Base64 encode/decode",
 			"Decoded": decoded,
 			"Encoded": encoded,
-			"Error":   errorStr,
+			"AlertMessage":   errorStr,
 		}), MainLayout)
 	})
 }
@@ -303,7 +303,7 @@ func urlPage(app *fiber.App) {
 			"Title":   "URL encode/decode",
 			"Decoded": decoded,
 			"Encoded": encoded,
-			"Error":   errorStr,
+			"AlertMessage":   errorStr,
 		}), MainLayout)
 	})
 }
@@ -329,7 +329,7 @@ func hashPage(app *fiber.App) {
 			"Title":  "Hashing",
 			"String": str,
 			"Result": result,
-			"Error":  errorStr,
+			"AlertMessage":  errorStr,
 		}), MainLayout)
 	})
 }

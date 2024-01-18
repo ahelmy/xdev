@@ -15,19 +15,16 @@
 </style>
 
 <body>
-    <div class="container">
+   
         <header></header>
+        {{template "ui/partials/alert" .}}
         <main>
-            <div class="row">
-                <div class="col-12">
-                    {{embed}}
-                </div>
-            </div>
+            {{template "ui/partials/navbar" .}}
+            {{embed}}
         </main>
         <footer>
             {{template "ui/partials/footer" .}}
         </footer>
-    </div>
 </body>
 
 </html>

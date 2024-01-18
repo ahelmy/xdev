@@ -1,0 +1,8 @@
+{{ if .AlertMessage }}
+<div class="alert-message">
+    <div class='alert alert-{{or .AlertType "danger"}} alert-dismissible fade show' role="alert">
+        {{.AlertMessage}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{{ end }}
