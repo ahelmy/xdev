@@ -151,9 +151,6 @@ func passwordPage(app *fiber.App) {
 		if err != nil {
 			length = 10
 		}
-		if length > internal.MaxLength {
-			length = internal.MaxLength
-		}
 		isEspecial := c.FormValue("especial") == "on"
 		isCapital := c.FormValue("capital") == "on"
 		isNumberic := c.FormValue("number") == "on"
@@ -173,7 +170,7 @@ func passwordPage(app *fiber.App) {
 		return c.Render(Prefix+"password", newMap(map[string]any{
 			"Title":     "Password Generator",
 			"Password":  password,
-			"length":    length,
+			"length":    len(password),
 			"MaxLength": internal.MaxLength,
 			"especial":  especial,
 			"capital":   capital,
