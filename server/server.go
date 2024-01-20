@@ -115,11 +115,11 @@ func jsonPage(app *fiber.App) {
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"json", newMap(map[string]any{
-			"Title":  "JSON",
-			"JSON":   c.FormValue("json"),
-			"Result": result,
-			"AlertMessage":  errorStr,
-			"action": action,
+			"Title":        "JSON",
+			"JSON":         c.FormValue("json"),
+			"Result":       result,
+			"AlertMessage": errorStr,
+			"action":       action,
 		}), MainLayout)
 	})
 }
@@ -168,12 +168,13 @@ func passwordPage(app *fiber.App) {
 		}
 		password := internal.GeneratePassword(length, isEspecial, isNumberic, isCapital)
 		return c.Render(Prefix+"password", newMap(map[string]any{
-			"Title":    "Password Generator",
-			"Password": password,
-			"length":   length,
-			"especial": especial,
-			"capital":  capital,
-			"number":   number,
+			"Title":     "Password Generator",
+			"Password":  password,
+			"length":    len(password),
+			"MaxLength": internal.MaxLength,
+			"especial":  especial,
+			"capital":   capital,
+			"number":    number,
 		}), MainLayout)
 	})
 }
@@ -197,11 +198,11 @@ func yamlPage(app *fiber.App) {
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"yaml", newMap(map[string]any{
-			"Title":  "YAML",
-			"YAML":   c.FormValue("yaml"),
-			"Result": result,
-			"AlertMessage":  errorStr,
-			"action": action,
+			"Title":        "YAML",
+			"YAML":         c.FormValue("yaml"),
+			"Result":       result,
+			"AlertMessage": errorStr,
+			"action":       action,
 		}), MainLayout)
 	})
 }
@@ -242,12 +243,12 @@ func jwtPage(app *fiber.App) {
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"jwt", newMap(map[string]any{
-			"Title":  "JWT",
-			"JWT":    jwtToken,
-			"Header": jwt.Header,
-			"Claims": jwt.Claims,
-			"Secret": secret,
-			"AlertMessage":  errorStr,
+			"Title":        "JWT",
+			"JWT":          jwtToken,
+			"Header":       jwt.Header,
+			"Claims":       jwt.Claims,
+			"Secret":       secret,
+			"AlertMessage": errorStr,
 		}), MainLayout)
 	})
 }
@@ -269,10 +270,10 @@ func base64Page(app *fiber.App) {
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"base64", newMap(map[string]any{
-			"Title":   "Base64 encode/decode",
-			"Decoded": decoded,
-			"Encoded": encoded,
-			"AlertMessage":   errorStr,
+			"Title":        "Base64 encode/decode",
+			"Decoded":      decoded,
+			"Encoded":      encoded,
+			"AlertMessage": errorStr,
 		}), MainLayout)
 	})
 }
@@ -300,10 +301,10 @@ func urlPage(app *fiber.App) {
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"url", newMap(map[string]any{
-			"Title":   "URL encode/decode",
-			"Decoded": decoded,
-			"Encoded": encoded,
-			"AlertMessage":   errorStr,
+			"Title":        "URL encode/decode",
+			"Decoded":      decoded,
+			"Encoded":      encoded,
+			"AlertMessage": errorStr,
 		}), MainLayout)
 	})
 }
@@ -326,10 +327,10 @@ func hashPage(app *fiber.App) {
 
 		// Render index within layouts/main
 		return c.Render(Prefix+"hash", newMap(map[string]any{
-			"Title":  "Hashing",
-			"String": str,
-			"Result": result,
-			"AlertMessage":  errorStr,
+			"Title":        "Hashing",
+			"String":       str,
+			"Result":       result,
+			"AlertMessage": errorStr,
 		}), MainLayout)
 	})
 }

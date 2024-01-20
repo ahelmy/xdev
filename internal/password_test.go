@@ -23,4 +23,10 @@ func TestGeneratePassword(t *testing.T) {
 	if len(password3) != 6 || strings.ContainsAny(password3, upperLetterChars) || strings.ContainsAny(password3, numberChars) || strings.ContainsAny(password3, specialChars) {
 		t.Errorf("Expected password length to be 6, without special characters and numeric characters or capital. but got %d", len(password3))
 	}
+
+	// Test case 4: Generate password with length greater than 2048
+	password4 := GeneratePassword(MaxLength*2, false, false, false)
+	if len(password4) != MaxLength || strings.ContainsAny(password4, upperLetterChars) || strings.ContainsAny(password4, numberChars) || strings.ContainsAny(password4, specialChars) {
+		t.Errorf("Expected password length to be %d, without special characters and numeric characters or capital. but got %v", MaxLength, password4)
+	}
 }
