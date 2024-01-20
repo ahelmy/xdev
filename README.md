@@ -3,7 +3,7 @@
 </p>
 
 # X development tools
-
+[![](https://dcbadge.vercel.app/api/server/HwBWUSRUew)](https://dcbadge.vercel.app/api/server/HwBWUSRUew)
 [![codecov](https://codecov.io/gh/ahelmy/xdev/graph/badge.svg?token=INCX6KXGD7)](https://codecov.io/gh/ahelmy/xdev)
   
 
