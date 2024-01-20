@@ -1,0 +1,3 @@
+#!/bin/bash
+go test -covermode=count -coverpkg=./... -coverprofile coverage.txt -v ./...
+go tool cover -html coverage.txt -o coverage.html 
