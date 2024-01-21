@@ -33,11 +33,12 @@ func TestNow(t *testing.T) {
 
 func TestConvertTimeFromEpoch(t *testing.T) {
 	epoch := int64(1625097600) // Replace with your desired epoch value
-	format := ParseFormat("")               // Replace with your desired format
+	format := ParseFormat("")  // Replace with your desired format
 
-	expectedUTC := "01-07-2021 00:00:00"          // Replace with your expected UTC time
-	expectedYourTimezone := "01-07-2021 02:00:00" // Replace with your expected time in your timezone
-	expectedEpoch := int64(1625097600)            // Replace with your expected epoch value
+	expectedUTC := "01-07-2021 00:00:00"                    // Replace with your expected UTC time
+	expected, _ := time.Parse(format, expectedUTC)          // Check if the expected UTC time is valid
+	expectedYourTimezone := expected.Local().Format(format) // Replace with your expected time in your timezone
+	expectedEpoch := expected.Local().Unix()                // Replace with your expected epoch value
 
 	result := ConvertTimeFromEpoch(epoch, format)
 
@@ -57,15 +58,16 @@ func TestConvertTimeFromEpoch(t *testing.T) {
 	}
 }
 func TestConvertTimeFromFormat(t *testing.T) {
-	datetime := "2022-01-01 12:00:00"
-	fromFormat := "2006-01-02 15:04:05"
+	datetime := "2022-01-01 10:00:00"
 	toFormat := "01-02-2006 15:04:05"
+	format := ParseFormat("yyyy-MM-dd HH:mm:ss")
 
-	expectedUTC := "01-01-2022 10:00:00"
-	expectedYourTimezone := "01-01-2022 12:00:00"
-	expectedEpoch := int64(1641031200)
+	expected, _ := time.ParseInLocation(format, datetime, time.Local)               // Check if the expected UTC time is valid
+	expectedUTC := expected.UTC().Format(toFormat)            // Replace with your expected UTC time
+	expectedYourTimezone := expected.Local().Format(toFormat) // Replace with your expected time in your timezone
+	expectedEpoch := expected.Local().Unix()
 
-	result, err := ConvertTimeFromFormat(datetime, fromFormat, toFormat)
+	result, err := ConvertTimeFromFormat(datetime, format, toFormat)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
