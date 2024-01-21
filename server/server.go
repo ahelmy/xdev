@@ -29,6 +29,7 @@ const (
 	Base64Path   = "/base64"
 	URLPath      = "/url"
 	HashPath     = "/hash"
+	TimePath     = "/time"
 )
 
 //go:embed ui/*
@@ -45,7 +46,6 @@ var imgFS embed.FS
 
 func newApp() *fiber.App {
 	engine := html.NewFileSystem(http.FS(uiFS), ".html")
-
 	return fiber.New(fiber.Config{
 		Views:          engine,
 		ReadBufferSize: 4096 * 3000,
@@ -77,6 +77,7 @@ func StartServer(port int32, isVerbose bool) {
 	base64Page(app)
 	urlPage(app)
 	hashPage(app)
+	timePage(app)
 
 	log.Fatal(app.Listen(":"+strconv.FormatInt(int64(port), 10), fiber.ListenConfig{EnablePrefork: true}))
 }
@@ -330,6 +331,45 @@ func hashPage(app *fiber.App) {
 			"Title":        "Hashing",
 			"String":       str,
 			"Result":       result,
+			"AlertMessage": errorStr,
+		}), MainLayout)
+	})
+}
+
+func timePage(app *fiber.App) {
+	app.Get(TimePath, func(c fiber.Ctx) error {
+		action := c.FormValue("action")
+
+		fromEpoch := c.FormValue("fromEpoch")
+		fromDateTime := c.FormValue("fromDateTime")
+
+		var time internal.Time
+		errorStr := ""
+		if action == "epoch" {
+			epochInt, err := strconv.ParseInt(fromEpoch, 10, 64)
+			if err != nil {
+				errorStr = err.Error()
+			} else {
+				time = internal.ConvertTimeFromEpoch(epochInt, internal.ToDateFormat)
+			}
+		} else if action == "format" {
+			_time, err := internal.ConvertTimeFromFormat(fromDateTime, internal.ParseFormat("dd-MM-yyyy HH:mm:ss"), internal.ToDateFormat)
+			if err != nil {
+				errorStr = err.Error()
+			} else {
+				time = _time
+			}
+		} else {
+			time = internal.Now(internal.ToDateFormat)
+			time2 := internal.Now(internal.ParseFormat("dd-MM-yyyy HH:mm:ss"))
+			fromEpoch = strconv.FormatInt(time2.Epoch, 10)
+			fromDateTime = time2.YourTimezone
+		}
+		return c.Render(Prefix+"time", newMap(map[string]any{
+			"Title":        "Time Converter",
+			"Time":         time,
+			"Epoch":        fromEpoch,
+			"DateTime":     fromDateTime,
 			"AlertMessage": errorStr,
 		}), MainLayout)
 	})

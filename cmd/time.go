@@ -46,7 +46,7 @@ var timeCmd = &cobra.Command{
 	Your Timezone: 24-24
 	Epoch: 1706054400`,
 	Run: func(cmd *cobra.Command, args []string) {
-		format := cmd.Flag("format").Value.String()
+		format := internal.ParseFormat(cmd.Flag("format").Value.String())
 		from := cmd.Flag("from").Value.String()
 		if len(args) == 0 {
 			fmt.Println(internal.Now(format))
@@ -58,13 +58,13 @@ var timeCmd = &cobra.Command{
 				fmt.Println(err)
 				return
 			}
-			fmt.Println(internal.ConvertTimeFromEpoch(epoch, format))
+			fmt.Println(internal.ConvertTimeFromEpoch(epoch, internal.ToDateFormat))
 		} else {
 			if from == "" {
 				fmt.Println("Please specify the from format")
 				return
 			}
-			time, err := internal.ConvertTimeFromFormat(args[0], from, format)
+			time, err := internal.ConvertTimeFromFormat(args[0], from, internal.ToDateFormat)
 			if err != nil {
 				fmt.Println(err)
 				return

@@ -1,0 +1,95 @@
+<div class="container mt-5">
+    <form>
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <label for="fromEpoch" class="form-label">Epoch</label>
+                <input class="form-control" id="fromEpoch" name="fromEpoch" value="{{.Epoch}}">
+            </div>
+            <div class="col-md-4 col-sm-4" style="align-self: end;">
+                <button style="width:100px;" type="submit" id="toDateBtn" onclick="submitForm('epoch')" class="btn btn-primary">To Date</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <label for="fromDateTime" class="form-label">Datetime (dd-MM-yyyy HH:mm:ss)</label>
+                <input  placeholder="dd-MM-yyyy HH:mm:ss"  class="form-control" id="fromDateTime" name="fromDateTime" value="{{.DateTime}}">
+            </div>
+            <div class="col-md-4 col-sm-4"  style="align-self: end;">
+                <button style="vertical-align:bottom;width:100px" type="submit" id="toEpochBtn" onclick="submitForm('format')" class="btn btn-primary">To Epoch</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-3">
+                        <b>UTC:</b>
+                    </div>
+                    <div class="col-7">
+                        {{.Time.UTC}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-4">
+                        <b>Your Timezone:</b>
+                    </div>
+                    <div class="col-md-7 col-sm-8">
+                        {{.Time.YourTimezone}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <b>Epoch:</b>
+                    </div>
+                    <div class="col-7">
+                        {{.Time.Epoch}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="action" id="action" value="{{.action}}">
+    </form>
+</div>
+
+<!-- Your custom script for copying text and showing tooltip -->
+<script>
+    function submitForm(action) {
+        $("#action").val(action);
+        $("#form").submit();
+    }
+    $(document).ready(function () {
+        // Initialize tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+
+        // Add click event to the Copy button
+        $("#copyButton").click(function () {
+            var input = $("#uuidField")[0];
+            input.focus();
+            input.select();
+
+            navigator.clipboard
+                .writeText(input.value)
+                .then(() => {
+                    // Show tooltip for a brief period
+                    $(this).text("Copied!");
+                    $(this).tooltip("show");
+
+                    // Hide tooltip after 1.5 seconds (adjust as needed)
+                    setTimeout(function () {
+                        $("#copyButton").tooltip("hide");
+                        $("#copyButton").text("Copy UUID!");
+                    }, 1500);
+                })
+                .catch(() => {
+                    alert("something went wrong");
+                });
+
+
+        });
+    });
+</script>

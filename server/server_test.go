@@ -414,3 +414,87 @@ func TestStartServer(t *testing.T) {
 		go StartServer(7000, true)
 	})
 }
+func TestTimePage(t *testing.T) {
+	app := newApp()
+	timePage(app)
+
+	t.Run("Test Time Page - Epoch", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=epoch and fromEpoch=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=epoch&fromEpoch=1234567890", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Epoch - Error", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=epoch and fromEpoch=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=epoch&fromEpoch=xyz", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Format", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=format and fromDateTime=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=format&fromDateTime=21-01-2024+21%3A03%3A56", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Format - Error", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=format and fromDateTime=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=format&fromDateTime=21-2024+21%3A03%3A56", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Default", func(t *testing.T) {
+		// Create a test request to the "/time" route without action and parameters
+		req := httptest.NewRequest(http.MethodGet, "/time", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+}

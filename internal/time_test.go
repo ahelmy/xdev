@@ -33,7 +33,7 @@ func TestNow(t *testing.T) {
 
 func TestConvertTimeFromEpoch(t *testing.T) {
 	epoch := int64(1625097600) // Replace with your desired epoch value
-	format := ""               // Replace with your desired format
+	format := ParseFormat("")               // Replace with your desired format
 
 	expectedUTC := "01-07-2021 00:00:00"          // Replace with your expected UTC time
 	expectedYourTimezone := "01-07-2021 02:00:00" // Replace with your expected time in your timezone
@@ -61,9 +61,9 @@ func TestConvertTimeFromFormat(t *testing.T) {
 	fromFormat := "2006-01-02 15:04:05"
 	toFormat := "01-02-2006 15:04:05"
 
-	expectedUTC := "01-01-2022 12:00:00"
+	expectedUTC := "01-01-2022 10:00:00"
 	expectedYourTimezone := "01-01-2022 12:00:00"
-	expectedEpoch := int64(1641038400)
+	expectedEpoch := int64(1641031200)
 
 	result, err := ConvertTimeFromFormat(datetime, fromFormat, toFormat)
 	if err != nil {
@@ -130,7 +130,7 @@ func TestParseFormat(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := parseFormat(test.format)
+		result := ParseFormat(test.format)
 		if result != test.expectedFormat {
 			t.Errorf("Expected format %s, but got %s", test.expectedFormat, result)
 		}

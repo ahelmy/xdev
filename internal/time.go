@@ -7,10 +7,11 @@ import (
 )
 
 const (
-	DateFormat = "02-01-2006 15:04:05"
+	DateFormat   = "02-01-2006 15:04:05"
+	ToDateFormat = "Monday, January 02, 2006 3:04:05 PM"
 )
 
-func parseFormat(format string) string {
+func ParseFormat(format string) string {
 	if format == "" {
 		return DateFormat
 	}
@@ -46,23 +47,17 @@ func (t Time) String() string {
 }
 
 func Now(format string) Time {
-	format = parseFormat(format)
-
 	t := time.Now()
 	return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
 }
 
 func ConvertTimeFromEpoch(epoch int64, format string) Time {
-	format = parseFormat(format)
 	t := time.Unix(epoch, 0)
 	return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
 }
 
 func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string) (Time, error) {
-	toFormat = parseFormat(toFormat)
-	fromFormat = parseFormat(fromFormat)
-
-	t, err := time.Parse(fromFormat, datetime)
+	t, err := time.ParseInLocation(fromFormat, datetime, time.Local)
 	if err != nil {
 		return Time{}, err
 	}
