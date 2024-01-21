@@ -23,5 +23,4 @@ go.work
 .vscode/
 
 coverage.txt
-coverage.xml
 coverage.html
