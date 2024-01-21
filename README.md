@@ -112,6 +112,7 @@ Available Commands:
   jwt           Decode or encode a JWT string.
   password      Password generator. Alias: pwd
   server        Start a web server, Alias: s
+  time          Time command to covert and manupulate time
   ulid          Generate a ulid string
   url           URL encode/decode.
   uuid          Generate a uuid string
@@ -156,6 +157,8 @@ List of features:
 - [X] URL encoding / decoding
 
 - [X] Add hashing (SHA256, MD5, ...)
+
+- [X] Time conversion
 
 **Next**
 
