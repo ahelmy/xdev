@@ -21,6 +21,12 @@ func TestIndexPage(t *testing.T) {
 		t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
 	}
 
+	req = httptest.NewRequest(http.MethodGet, "/404", nil)
+	resp, err = app.Test(req)
+	if err != nil {
+		t.Fatalf("Failed to send test request: %v", err)
+	}
+
 	// TODO: Add more assertions for the response body or other expectations
 }
 
