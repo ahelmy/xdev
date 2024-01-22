@@ -3,6 +3,7 @@ package server
 import (
 	"embed"
 	"encoding/json"
+	"errors"
 	"io/fs"
 	"log"
 	"net/http"
@@ -44,11 +45,35 @@ var jsFS embed.FS
 //go:embed ui/img/*
 var imgFS embed.FS
 
+var errorHandler = func(ctx fiber.Ctx, err error) error {
+	// Status code defaults to 500
+	code := fiber.StatusInternalServerError
+
+	// Retrieve the custom status code if it's a *fiber.Error
+	var e *fiber.Error
+	if errors.As(err, &e) {
+		code = e.Code
+	}
+
+	errorStr := ""
+	// Send custom error page
+	if err != nil {
+		errorStr = err.Error()
+	}
+	// Return from handler
+	return ctx.Render(Prefix+"error", newMap(map[string]any{
+		"ErrorCode":    code,
+		"ErrorMessage": errorStr,
+	}), MainLayout)
+}
+
 func newApp() *fiber.App {
 	engine := html.NewFileSystem(http.FS(uiFS), ".html")
 	return fiber.New(fiber.Config{
 		Views:          engine,
 		ReadBufferSize: 4096 * 3000,
+		// Override default error handler
+		ErrorHandler: errorHandler,
 	})
 }
 
