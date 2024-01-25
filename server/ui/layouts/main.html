@@ -13,9 +13,12 @@
         flex: 1;
     }
 </style>
-
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 <body>
-   
         <header></header>
         {{template "ui/partials/alert" .}}
         <main>

@@ -13,13 +13,14 @@
 </style>
 <div class="container mt-5">
     <form id="form">
-        {{.Error}}
         <div class="row">
             <div class="col-md-6 col-sm-12">
-                <button type="button" style="width: 100%;" class="btn btn-primary btn-block" onclick="submitForm('decode')">Decode</button>
+                <button type="button" style="width: 100%;" class="btn btn-primary btn-block"
+                    onclick="decodeJWT()">Decode</button>
             </div>
             <div class="col-md-6 col-sm-12">
-                <button type="button" style="width: 100%;" class="btn btn-primary btn-block" onclick="submitForm('encode')">Encode</button>
+                <button type="button" style="width: 100%;" class="btn btn-primary btn-block"
+                    onclick="encodeJWT()">Encode</button>
             </div>
         </div>
         <div class="row">
@@ -32,7 +33,7 @@
                         Encoded token
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control  no-outline" id="jwt" name="jwt" rows="30">{{.JWT}}</textarea>
+                        <textarea class="form-control  no-outline" id="jwt" name="jwt" rows="30"></textarea>
                     </div>
                 </div>
             </div>
@@ -44,7 +45,8 @@
                                 Header
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="header" name="header" rows="4">{{.Header}}</textarea>
+                                <textarea class="form-control  no-outline" id="header" name="header"
+                                    rows="4"></textarea>
                             </div>
                         </div>
                     </div>
@@ -56,7 +58,8 @@
                                 Payload
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="claims" name="claims" rows="15">{{.Claims}}</textarea>
+                                <textarea class="form-control  no-outline" id="claims" name="claims"
+                                    rows="15"></textarea>
                             </div>
                         </div>
                     </div>
@@ -68,22 +71,70 @@
                                 Secret
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="secret" name="secret" rows="4">{{.Secret}}</textarea>
+                                <textarea class="form-control  no-outline" id="secret" name="secret"
+                                    rows="4"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <input type="hidden" name="action" id="action" value="{{.action}}">
     </form>
 </div>
 
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
-    function submitForm(action) {
-        $("#action").val(action);
-        $("#form").submit();
+    function encodeJWT() {
+        try {
+            headerJson = JSON.parse(document.headers.getValue());
+        } catch (e) {
+            showAlert('Invalid Header JSON!');
+            return;
+        }
+        try {
+            claimsJson = JSON.parse(document.claims.getValue());
+        } catch (e) {
+            showAlert('Invalid Claims JSON!');
+            return;
+        }
+        $.ajax({
+            url: "/api/jwt/encode",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                headers: headerJson,
+                claims: claimsJson,
+                secret: $("#secret").val(),
+            }), type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                document.jwt.setValue(data.data.jwt);
+            }, error: function (data) {
+                showAlert('Failed to encode JWT!');
+            }
+        });
+    }
+
+    function decodeJWT() {
+        $.ajax({
+            url: "/api/jwt/decode",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                jwt: document.jwt.getValue(),
+            }), type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                document.headers.setValue(data.data.headers);
+                document.claims.setValue(data.data.claims);
+            }, error: function (data) {
+                showAlert('Failed to decode JWT!');
+            }
+        });
     }
 
     $(document).ready(function () {
@@ -92,6 +143,7 @@
             lineNumbers: false,
             lineWrapping: true
         });
+        document.jwt = jwt;
         jwt.focus();
 
         var header = CodeMirror.fromTextArea(document.getElementById("header"), {
@@ -99,38 +151,14 @@
             lineNumbers: false,
             lineWrapping: true
         });
+        header.setValue(JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2));
+        document.headers = header;
         var claims = CodeMirror.fromTextArea(document.getElementById("claims"), {
             mode: "javascript",
             lineNumbers: false,
             lineWrapping: true
         });
-        // Initialize tooltip
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // Add click event to the Copy button
-        $("#copyButton").click(function () {
-            var input = $("#pwdField")[0];
-            input.focus();
-            input.select();
-
-            navigator.clipboard
-                .writeText(input.value)
-                .then(() => {
-                    // Show tooltip for a brief period
-                    $(this).text("Copied!");
-                    $(this).tooltip("show");
-
-                    // Hide tooltip after 1.5 seconds (adjust as needed)
-                    setTimeout(function () {
-                        $("#copyButton").tooltip("hide");
-                        $("#copyButton").text("Copy Password!");
-                    }, 1500);
-                })
-                .catch(() => {
-                    alert("something went wrong");
-                });
-
-
-        });
+        claims.setValue(JSON.stringify({}, null, 2));
+        document.claims = claims;
     });
 </script>

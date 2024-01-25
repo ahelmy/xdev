@@ -37,9 +37,9 @@ func ParseFormat(format string) string {
 }
 
 type Time struct {
-	UTC          string
-	YourTimezone string
-	Epoch        int64
+	UTC          string `json:"utc"`
+	YourTimezone string `json:"your_timezone"`
+	Epoch        int64  `json:"epoch"`
 }
 
 func (t Time) String() string {

@@ -2,22 +2,21 @@
 
 <div class="container mt-5">
     <form id="form">
-        {{.Error}}
         <div class="row">
             <div class="col-11">
                 <div class="card" style="height: 100%;">
                     <div class="card-header">
-                        Encoded string
+                        Encoded text
                     </div>
                     <div class="card-body">
                         <textarea class="form-control  no-outline" id="encoded" name="encoded"
-                            rows="6">{{.Encoded}}</textarea>
+                            rows="6"></textarea>
                     </div>
                 </div>
             </div>
             <div class="col-1 align-self-center">
                     <button type="button" class="btn btn-primary btn-block"
-                        onclick="submitForm('decode')">Decode</button>
+                        onclick="decodeBase64()">Decode</button>
             </div>
         </div>
         <div class="row">
@@ -27,58 +26,62 @@
             <div class="col-11">
                 <div class="card" style="height: 100%;">
                     <div class="card-header">
-                        Decoded string
+                        Clear text
                     </div>
                     <div class="card-body">
                         <textarea class="form-control  no-outline" id="decoded" name="decoded"
-                            rows="6">{{.Decoded}}</textarea>
+                            rows="6"></textarea>
                     </div>
                 </div>
             </div>
             <div class="col-1 align-self-center">
                 <button type="button" class="btn btn-primary btn-block"
-                onclick="submitForm('encode')">Encode</button>
+                onclick="encodeBase64()">Encode</button>
             </div>
         </div>
-        <input type="hidden" name="action" id="action" value="">
     </form>
 </div>
 
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
-    function submitForm(action) {
-        $("#action").val(action);
-        $("#form").submit();
+    function encodeBase64() {
+        $.ajax({
+            url: "/api/base64?action=encode",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                string: $("#decoded").val(),
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                $("#encoded").val(data.data.base64);
+            }, error: function (data) {
+                showAlert('Failed to encode Base64!');
+            }
+        });
+    }
+    function decodeBase64() {
+        $.ajax({
+            url: "/api/base64?action=decode",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                string: $("#encoded").val(),
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                $("#decoded").val(data.data.base64);
+            }, error: function (data) {
+                showAlert('Failed to encode Base64!');
+            }
+        });
     }
     $(document).ready(function () {
-
-        // Initialize tooltip
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // Add click event to the Copy button
-        $("#copyButton").click(function () {
-            var input = $("#pwdField")[0];
-            input.focus();
-            input.select();
-
-            navigator.clipboard
-                .writeText(input.value)
-                .then(() => {
-                    // Show tooltip for a brief period
-                    $(this).text("Copied!");
-                    $(this).tooltip("show");
-
-                    // Hide tooltip after 1.5 seconds (adjust as needed)
-                    setTimeout(function () {
-                        $("#copyButton").tooltip("hide");
-                        $("#copyButton").text("Copy Password!");
-                    }, 1500);
-                })
-                .catch(() => {
-                    alert("something went wrong");
-                });
-
-
-        });
     });
 </script>

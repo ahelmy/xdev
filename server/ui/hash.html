@@ -1,6 +1,5 @@
 <div class="container mt-5">
     <form id="form">
-        {{.Error}}
         <div class="row">
             <div class="col-10">
                 <div class="card" style="height: 100%;">
@@ -8,25 +7,16 @@
                         Clear String
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control  no-outline" id="string" name="string"
-                            rows="6">{{.String}}</textarea>
+                        <textarea class="form-control  no-outline" id="string" name="string" rows="6"></textarea>
                     </div>
                 </div>
             </div>
             <div class="col-2 align-self-center">
-                <div class="row g-2">
-                    <div class="col">
-                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('md5')">MD5</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('sha256')">SHA256</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('sha512')">SHA512</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary btn-block" onclick="submitForm('salt')">Salt</button>
-                    </div>
+                <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                    <button type="button" class="btn btn-primary btn-block" onclick="hash('md5')">MD5</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="hash('sha256')">SHA256</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="hash('sha512')">SHA512</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="hash('salt')">Salt</button>
                 </div>
             </div>
         </div>
@@ -40,51 +30,35 @@
                         Hashed String
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control  no-outline" id="hashed" name="hashed"
-                            rows="6">{{.Result}}</textarea>
+                        <textarea class="form-control  no-outline" id="hashed" name="hashed" rows="6"></textarea>
                     </div>
                 </div>
             </div>
         </div>
-        <input type="hidden" name="action" id="action" value="">
     </form>
 </div>
 
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
-    function submitForm(action) {
-        $("#action").val(action);
-        $("#form").submit();
+    function hash(algorithm) {
+        $.ajax({
+            url: `/api/hash?algorithm=${algorithm}`,
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                string: $("#string").val(),
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                $("#hashed").val(data.data.hash);
+            }, error: function (data) {
+                showAlert('Failed to encode Base64!');
+            }
+        });
     }
     $(document).ready(function () {
-
-        // Initialize tooltip
-        $('[data-toggle="tooltip"]').tooltip();
-
-        // Add click event to the Copy button
-        $("#copyButton").click(function () {
-            var input = $("#pwdField")[0];
-            input.focus();
-            input.select();
-
-            navigator.clipboard
-                .writeText(input.value)
-                .then(() => {
-                    // Show tooltip for a brief period
-                    $(this).text("Copied!");
-                    $(this).tooltip("show");
-
-                    // Hide tooltip after 1.5 seconds (adjust as needed)
-                    setTimeout(function () {
-                        $("#copyButton").tooltip("hide");
-                        $("#copyButton").text("Copy Password!");
-                    }, 1500);
-                })
-                .catch(() => {
-                    alert("something went wrong");
-                });
-
-
-        });
     });
 </script>
