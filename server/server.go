@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/ahelmy/xdev/api"
 	"github.com/ahelmy/xdev/app"
@@ -94,11 +95,13 @@ var errorHandler = func(ctx fiber.Ctx, err error) error {
 	if errors.As(err, &e) {
 		code = e.Code
 	}
-
 	errorStr := ""
 	// Send custom error page
 	if err != nil {
 		errorStr = err.Error()
+	}
+	if strings.HasPrefix(ctx.Route().Path, APIPrefix) {
+		return ctx.JSON(Response{Success: false, Message: strconv.Itoa(code) + ": " + errorStr})
 	}
 	// Return from handler
 	return ctx.Render(Prefix+"error", newMap(map[string]any{
