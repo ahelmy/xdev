@@ -27,6 +27,12 @@ func TestIndexPage(t *testing.T) {
 		t.Fatalf("Failed to send test request: %v", err)
 	}
 
+	req = httptest.NewRequest(http.MethodGet, "/api/x", nil)
+	resp, err = app.Test(req)
+	if err != nil {
+		t.Fatalf("Failed to send test request: %v", err)
+	}
+
 	// TODO: Add more assertions for the response body or other expectations
 }
 
