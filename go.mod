@@ -2,8 +2,6 @@ module github.com/ahelmy/xdev
 
 go 1.21
 
-toolchain go1.21.5
-
 require (
 	github.com/gofiber/fiber/v3 v3.0.0-20240106164914-960b65258767
 	github.com/gofiber/template/html/v2 v2.0.5
