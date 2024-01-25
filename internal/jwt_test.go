@@ -43,13 +43,13 @@ func TestDecodeJWT(t *testing.T) {
 	}
 }
 func TestEncodeJWT(t *testing.T) {
-	algorithm := "HS256"
-	claims := `{"sub": "Ahelmy", "exp": 1566964030}`
+	headers := map[string]interface{}{"alg": "HS256"}
+	claims := map[string]interface{}{"sub": "Ahelmy", "exp": 1566964030}
 	signature := "secret-key"
 
-	expectedToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjY5NjQwMzAsInN1YiI6IkFoZWxteSJ9.dvfEUt0hp0DFG4Wfxo78wXDFivHWT65paDnKD0-wNgI"
+	expectedToken := "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY5NjQwMzAsInN1YiI6IkFoZWxteSJ9.OrPZ7aEsYideAkIoilzHGWZYEZ7U1KR7RQvPG7263Jg"
 
-	token, err := EncodeJWT(algorithm, claims, signature)
+	token, err := EncodeJWT(headers, claims, signature)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
@@ -58,13 +58,13 @@ func TestEncodeJWT(t *testing.T) {
 		t.Errorf("Expected token to be '%s', but got '%s'", expectedToken, token)
 	}
 
-	_, err = EncodeJWT("xyz", claims, signature)
+	_, err = EncodeJWT(map[string]interface{}{"alg": "xyz"}, claims, signature)
 	if err == nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
 
-	_, err = EncodeJWT("HS256", `{"invalid`, signature)
-	if err == nil {
+	_, err = EncodeJWT(map[string]interface{}{"alg2": "xyz"}, claims, signature)
+	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
 }

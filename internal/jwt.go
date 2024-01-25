@@ -34,17 +34,15 @@ func DecodeJWT(jwtToken string) (JWT, error) {
 	return JWT{Header: string(headersJSON), Claims: string(claimsJSON), Expires: expires}, nil
 }
 
-func EncodeJWT(algorithm string, claims string, signature string) (string, error) {
-	var claimsMap map[string]interface{}
-	err := json.Unmarshal([]byte(claims), &claimsMap)
-	if err != nil {
-		return "", err
-	}
-
+func EncodeJWT(headers map[string]interface{}, claims map[string]interface{}, signature string) (string, error) {
 	algorithms := jwt.GetAlgorithms()
 	algorithmExists := false
+	if _, ok := headers["alg"]; !ok {
+		headers["alg"] = "HS256"
+	}
+	algorithm := headers["alg"].(string)
 	for _, a := range algorithms {
-		if a == algorithm {
+		if a == headers["alg"] {
 			algorithm = a
 			algorithmExists = true
 			break
@@ -54,7 +52,8 @@ func EncodeJWT(algorithm string, claims string, signature string) (string, error
 		return "", fmt.Errorf("algorithm %s is not supported", algorithm)
 	}
 
-	token := jwt.NewWithClaims(jwt.GetSigningMethod(algorithm), jwt.MapClaims(claimsMap))
+	token := jwt.NewWithClaims(jwt.GetSigningMethod(algorithm), jwt.MapClaims(claims))
+	token.Header = headers
 	signedString, err := token.SignedString([]byte(signature))
 	return signedString, err
 }

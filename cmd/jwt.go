@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -19,7 +20,7 @@ var jwtCmd = &cobra.Command{
 	Long: `Decode or encode a JWT string. For example:
 	
 	jwt "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBaGVsbXkiLCJleHAiOjE1NjY5NjQwMzB9.2ZQ5"
-	jwt -a HS256 -c '{"name":"ali"}' -s 123`,
+	jwt -h {"alg": "HS256"} -c '{"name":"ali"}' -s 123`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 1 && args[0][0] == 'e' {
 			jwt, err := internal.DecodeJWT(args[0])
@@ -35,10 +36,22 @@ var jwtCmd = &cobra.Command{
 			}
 			fmt.Println("Expires at: ", expiry)
 		} else {
-			algorithm := cmd.Flag("algorithm").Value.String()
-			claims := cmd.Flag("claims").Value.String()
+			headersStr := cmd.Flag("headers").Value.String()
+			headers := make(map[string]interface{})
+			err := json.Unmarshal([]byte(headersStr), &headers)
+			if err != nil {
+				fmt.Println("Invalid headers format:", err)
+				return
+			}
+			claimsStr := cmd.Flag("claims").Value.String()
+			claims := make(map[string]interface{})
+			err = json.Unmarshal([]byte(claimsStr), &claims)
+			if err != nil {
+				fmt.Println("Invalid claims format:", err)
+				return
+			}
 			secret := cmd.Flag("secret").Value.String()
-			jwt, err := internal.EncodeJWT(algorithm, claims, secret)
+			jwt, err := internal.EncodeJWT(headers, claims, secret)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -50,7 +63,7 @@ var jwtCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(jwtCmd)
-	jwtCmd.Flags().StringP("algorithm", "a", "HS256", "The algorithm to use for signing the JWT")
+	jwtCmd.Flags().StringP("headers", "d", "{}", "The header to encode in the JWT")
 	jwtCmd.Flags().StringP("claims", "c", "{}", "The claims to encode in the JWT")
 	jwtCmd.Flags().StringP("secret", "s", "", "The secret to use for signing the JWT")
 	// Here you will define your flags and configuration settings.
