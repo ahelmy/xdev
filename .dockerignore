@@ -4,6 +4,7 @@
 !internal
 !server
 !app
+!api
 !go.mod
 !go.sum
 !main.go
