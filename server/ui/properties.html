@@ -1,0 +1,72 @@
+<div class="container mt-5">
+    <form id="form">
+        <!--        properties input-->
+        <div class="row">
+            <div class="col-10">
+                <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="height: 100%;">
+                    <div class="card-header bg-primary text-white">
+                        properties
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control no-outline" id="properties" name="properties" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 align-self-center">
+                <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+                    <button type="button" class="btn btn-primary btn-block" onclick=convertPropertiesToYaml()>
+                        Convert
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!--        yaml output-->
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="height: 100%;">
+                    <div class="card-header bg-primary text-white">
+                        yaml
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control no-outline" id="yaml" name="yaml" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Your custom script for copying text and showing tooltip -->
+<script>
+    function convertPropertiesToYaml() {
+        $.ajax({
+            url: "/api/properties",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                properties: $("#properties").val(),
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                $("#yaml").val(data.data.yaml);
+            }, error: function (data) {
+                showAlert('Failed to convert properties to YAML!');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // convertPropertiesToYaml();
+        // // Add click event to the Copy button
+        // $("#copyButton").click(function () {
+        //     copyToClipboard($("#properties")[0], $("#copyButton"));
+        // });
+    });
+</script>

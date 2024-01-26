@@ -40,3 +40,48 @@ func TestYaml2JSON(t *testing.T) {
 		})
 	}
 }
+
+func TestYaml2Properties(t *testing.T) {
+	tests := []struct {
+		name             string
+		yamlString       string
+		expectedProperty string
+		expectError      bool
+	}{
+		{
+			name:             "Valid YAML",
+			yamlString:       "key: value\nnested:\n  subkey: subvalue",
+			expectedProperty: "key=value\nnested.subkey=subvalue\n",
+			expectError:      false,
+		},
+		{
+			name:             "Invalid YAML",
+			yamlString:       "invalid: yaml: string",
+			expectedProperty: "",
+			expectError:      true,
+		},
+		{
+			name:             "Nested Map",
+			yamlString:       "parent:\n  child:\n    grandchild: value",
+			expectedProperty: "parent.child.grandchild=value\n",
+			expectError:      false,
+		},
+		{
+			name:             "List",
+			yamlString:       "fruits:\n  - apple\n  - banana\n  - cherry",
+			expectedProperty: "fruits[0]=apple\nfruits[1]=banana\nfruits[2]=cherry\n",
+			expectError:      false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := Yaml2Properties(tt.yamlString)
+			if (err != nil) != tt.expectError {
+				t.Errorf("Unexpected error status. Got error: %v, expected error: %v", err, tt.expectError)
+			}
+
+			assert.Equal(t, tt.expectedProperty, result)
+		})
+	}
+}
