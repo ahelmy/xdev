@@ -75,6 +75,11 @@
                     return;
                 }
                 document.results.setValue(data.data.json);
+                if (action == "json2Yaml") {
+                    document.results.setOption("mode", "text/yaml");
+                } else {
+                    document.results.setOption("mode", "javascript");
+                }
             }, error: function (data) {
                 showAlert(`Failed to ${action} JSON!`);
             }
@@ -90,7 +95,7 @@
         });
         document.json = json;
         var result = CodeMirror.fromTextArea(document.getElementById("result"), {
-            mode: $("#action").val() =="json2Yaml" ? "text/yaml": "javascript",
+            mode: "javascript",
             lineNumbers: true,
             gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
             foldGutter: true,

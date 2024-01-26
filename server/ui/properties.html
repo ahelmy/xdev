@@ -1,38 +1,56 @@
+<script src="/js/codemirror.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/javascript.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/yaml.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/properties.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/indent-fold.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/brace-fold.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/foldcode.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/foldgutter.min.js" crossorigin="anonymous"></script>
+<link href="/css/foldgutter.min.css" rel="stylesheet" crossorigin="anonymous">
+
+<style>
+    /* Add custom CSS to disable textarea highlighting */
+    .no-outline {
+        outline: none;
+    }
+
+    .CodeMirror {
+        height: 400px !important;
+    }
+</style>
 <div class="container mt-5">
     <form id="form">
-        <!--        properties input-->
         <div class="row">
             <div class="col-10">
-                <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="height: 100%;">
-                    <div class="card-header bg-primary text-white">
-                        properties
+                <div class="card" style="min-height: 460px;max-height:460px">
+                    <div class="card-header">
+                        Properties
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control no-outline" id="properties" name="properties" rows="6"></textarea>
+                        <textarea class="form-control  no-outline" id="properties" name="properties" rows="30"></textarea>
                     </div>
                 </div>
             </div>
-            <div class="col-2 align-self-center">
-                <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-primary btn-block" onclick=convertPropertiesToYaml()>
-                        Convert
-                    </button>
+            <div class="col-2">
+                <div class="row g-2">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btn-block"
+                            onclick="propertiesToYaml()">To Yaml</button>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!--        yaml output-->
         <div class="row">
             <div class="col-12">&nbsp;</div>
         </div>
         <div class="row">
-            <div class="col-12">
-                <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="height: 100%;">
-                    <div class="card-header bg-primary text-white">
-                        yaml
+            <div class="col-11">
+                <div class="card" style="min-height: 460px;max-height:460px">
+                    <div class="card-header">
+                        Result
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control no-outline" id="yaml" name="yaml" rows="6"></textarea>
+                        <textarea class="form-control  no-outline" id="result" rows="30"></textarea>
                     </div>
                 </div>
             </div>
@@ -42,20 +60,20 @@
 
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
-    function convertPropertiesToYaml() {
+    function propertiesToYaml() {
         $.ajax({
             url: "/api/properties",
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
-                properties: $("#properties").val(),
+                properties: document.properties.getValue(),
             }),
             type: 'post', success: function (data) {
                 if (!data.success) {
                     showAlert(data.message);
                     return;
                 }
-                $("#yaml").val(data.data.yaml);
+                document.results.setValue(data.data.yaml);
             }, error: function (data) {
                 showAlert('Failed to convert properties to YAML!');
             }
@@ -63,10 +81,21 @@
     }
 
     $(document).ready(function () {
-        // convertPropertiesToYaml();
-        // // Add click event to the Copy button
-        // $("#copyButton").click(function () {
-        //     copyToClipboard($("#properties")[0], $("#copyButton"));
-        // });
+        var properties = CodeMirror.fromTextArea(document.getElementById("properties"), {
+            mode: "text/x-properties",
+            lineNumbers: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            foldGutter: true,
+            lineWrapping: true
+        });
+        document.properties = properties;
+        var result = CodeMirror.fromTextArea(document.getElementById("result"), {
+            mode: "text/yaml",
+            lineNumbers: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            foldGutter: true,
+            lineWrapping: true
+        });
+        document.results = result;
     });
 </script>
