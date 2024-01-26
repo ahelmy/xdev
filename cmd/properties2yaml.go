@@ -2,14 +2,16 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/ahelmy/xdev/internal"
 	"github.com/spf13/cobra"
 )
 
 var properties2yamlCmd = &cobra.Command{
-	Use:   "p2y",
-	Short: "Convert Java Properties to YAML",
-	Long:  `Convert Java Properties to YAML`,
+	Use:     "properties2yaml",
+	Aliases: []string{"p2y"},
+	Short:   "Convert Java Properties to YAML, Alias: p2y",
+	Long:    `Convert Java Properties to YAML`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Please provide a Java Properties string.")

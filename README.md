@@ -102,21 +102,23 @@ Usage:
   xdev [command]
 
 Available Commands:
-  base64decoder Decode base64 string. Alias: b64d
-  base64encoder Encode string to base64. Alias: b64e
-  completion    Generate the autocompletion script for the specified shell
-  hash          Hash a string
-  help          Help about any command
-  json          JSON indentation and minification
-  json2yaml     Convert JSON to YAML. Alias: j2y
-  jwt           Decode or encode a JWT string.
-  password      Password generator. Alias: pwd
-  server        Start a web server, Alias: s
-  time          Time command to covert and manupulate time
-  ulid          Generate a ulid string
-  url           URL encode/decode.
-  uuid          Generate a uuid string
-  yaml2json     Convert YAML to JSON. Alias: y2j
+  base64decoder   Decode base64 string. Alias: b64d
+  base64encoder   Encode string to base64. Alias: b64e
+  completion      Generate the autocompletion script for the specified shell
+  hash            Hash a string
+  help            Help about any command
+  json            JSON indentation and minification
+  json2yaml       Convert JSON to YAML. Alias: j2y
+  jwt             Decode or encode a JWT string.
+  password        Password generator. Alias: pwd
+  properties2yaml Convert Java Properties to YAML, Alias: p2y
+  server          Start a web server, Alias: s
+  time            Time command to covert and manupulate time
+  ulid            Generate a ulid string
+  url             URL encode/decode.
+  uuid            Generate a uuid string
+  yaml2json       Convert YAML to JSON. Alias: y2j
+  yaml2properties Convert YAML to Java Properties, Alias: y2p
 
 Flags:
   -h, --help      help for xdev
@@ -160,9 +162,9 @@ List of features:
 
 - [X] Time conversion
 
-**Next**
+- [X] Yaml2Properties
 
-- [ ] Yaml2Properties
+**Next**
 
 - [ ] Add `choco`, `brew` and `linux` package managers download.
 
