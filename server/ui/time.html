@@ -102,7 +102,7 @@
     }
     function now(){
         $.ajax({
-            url: "/api/time",
+            url: `/api/time?timezone=${_GetCurrentTimeZone()}`,
             type: 'get', 
             success: function (data) {
                 if (!data.success) {
@@ -118,4 +118,9 @@
     $(document).ready(function () {
         now();
     });
+
+    function _GetCurrentTimeZone()
+    {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
 </script>

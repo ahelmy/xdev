@@ -46,9 +46,18 @@ func (t Time) String() string {
 	return fmt.Sprintf("UTC: %s\nYour Timezone: %s\nEpoch: %d", t.UTC, t.YourTimezone, t.Epoch)
 }
 
-func Now(format string) Time {
+func Now(format string, timeZone *string) (Time, error) {
 	t := time.Now()
-	return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
+
+	if timeZone == nil {
+		return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}, nil
+	}
+
+	location, err := time.LoadLocation(*timeZone)
+	if err != nil {
+		return Time{}, err
+	}
+	return Time{UTC: t.UTC().Format(format), YourTimezone: t.In(location).Format(format), Epoch: t.Unix()}, nil
 }
 
 func ConvertTimeFromEpoch(epoch int64, format string) Time {

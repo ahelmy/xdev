@@ -47,7 +47,8 @@ func timeAPI(app *fiber.App) {
 		return c.JSON(Response{Success: true, Data: map[string]interface{}{"time": time}})
 	})
 	app.Get(APIPrefix+TimePath, func(c fiber.Ctx) error {
-		time := internal.Now(internal.ToDateFormat)
+		var timeZone = c.Query("timezone")
+		time, _ := internal.Now(internal.ToDateFormat, &timeZone)
 		return c.JSON(Response{Success: true, Data: map[string]interface{}{"time": time}})
 	})
 }
