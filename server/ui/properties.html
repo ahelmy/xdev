@@ -48,7 +48,7 @@
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
-                string: $("#properties").val(),
+                properties: $("#properties").val(),
             }),
             type: 'post', success: function (data) {
                 if (!data.success) {

@@ -31,6 +31,13 @@ func yamlAPI(app *fiber.App) {
 			}
 			result = _yaml
 		}
+		if action == "to_properties" {
+			_yaml, err := internal.Yaml2Properties(yamlRequest.Yaml)
+			if err != nil {
+				return c.JSON(Response{Success: false, Message: err.Error()})
+			}
+			result = _yaml
+		}
 		return c.JSON(Response{Success: true, Data: map[string]interface{}{"yaml": result}})
 	})
 }
