@@ -32,6 +32,7 @@ const (
 	URLPath      = "/url"
 	HashPath     = "/hash"
 	TimePath     = "/time"
+	Properties   = "/properties"
 )
 
 //go:embed ui/*
@@ -148,6 +149,7 @@ func StartServer(port int32, isVerbose bool) {
 	urlPage(app)
 	hashPage(app)
 	timePage(app)
+	propertiesPage(app)
 
 	log.Fatal(app.Listen(":"+strconv.FormatInt(int64(port), 10), fiber.ListenConfig{EnablePrefork: true}))
 }
@@ -244,6 +246,15 @@ func timePage(app *fiber.App) {
 			"Title": "Time Converter",
 		}), MainLayout)
 	})
+}
+
+func propertiesPage(app *fiber.App) {
+	app.Get(Properties, func(c fiber.Ctx) error {
+		return c.Render(Prefix+"properties", newMap(map[string]any{
+			"Title": "Properties",
+		}), MainLayout)
+	})
+
 }
 
 func defineResources(app *fiber.App) {

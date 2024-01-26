@@ -25,4 +25,5 @@ func AddAPILayer(app *fiber.App) {
 	urlAPI(app)
 	hashAPI(app)
 	timeAPI(app)
+	propertiesAPI(app)
 }
