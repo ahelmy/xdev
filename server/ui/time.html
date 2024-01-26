@@ -1,0 +1,121 @@
+<div class="container mt-5">
+    <form>
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <label for="fromEpoch" class="form-label">Epoch</label>
+                <input class="form-control" id="fromEpoch" name="fromEpoch" value="">
+            </div>
+            <div class="col-md-4 col-sm-4" style="align-self: end;">
+                <button style="width:100px;" type="button" id="toDateBtn" onclick="epcoh()" class="btn btn-primary">To Date</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-sm-8">
+                <label for="fromDateTime" class="form-label">Datetime (dd-MM-yyyy HH:mm:ss)</label>
+                <input  placeholder="dd-MM-yyyy HH:mm:ss"  class="form-control" id="fromDateTime" name="fromDateTime" value="">
+            </div>
+            <div class="col-md-4 col-sm-4"  style="align-self: end;">
+                <button style="vertical-align:bottom;width:100px" type="button" id="toEpochBtn" onclick="datetime()" class="btn btn-primary">To Epoch</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-3">
+                        <b>UTC:</b>
+                    </div>
+                    <div class="col-7">
+                        <span id="utc"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-4">
+                        <b>Your Timezone:</b>
+                    </div>
+                    <div class="col-md-7 col-sm-8">
+                        <span id="timezone"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <b>Epoch:</b>
+                    </div>
+                    <div class="col-7">
+                       <span id="epoch"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Your custom script for copying text and showing tooltip -->
+<script>
+    function timeToHtml(time){
+        $("#epoch").html(time.epoch);
+        $("#utc").html(time.utc);
+        $("#timezone").html(time.your_timezone);
+    }
+    function epcoh() {
+        $.ajax({
+            url: "/api/time/epoch",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                epoch: $("#fromEpoch").val(),
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                timeToHtml(data.data.time);
+            }, error: function (data) {
+                showAlert('Failed to convert epoch!');
+            }
+        });        
+    }
+    function datetime(){
+        $.ajax({
+            url: "/api/time/datetime",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                datetime: $("#fromDateTime").val(),
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                timeToHtml(data.data.time);
+            }, error: function (data) {
+                showAlert('Failed to convert DateTime!');
+            }
+        });
+    }
+    function now(){
+        $.ajax({
+            url: "/api/time",
+            type: 'get', 
+            success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                timeToHtml(data.data.time);
+            }, error: function (data) {
+                showAlert('Failed to convert DateTime!');
+            }
+        });
+    }
+    $(document).ready(function () {
+        now();
+    });
+</script>

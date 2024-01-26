@@ -6,27 +6,32 @@ import (
 )
 
 const (
-	letterChars   = "abcdefghijklmnopqrstuvwxyz"
+	letterChars      = "abcdefghijklmnopqrstuvwxyz"
 	upperLetterChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	numberChars   = "0123456789"
-	specialChars  = "!@#$%^&*()_+{}[]:;<>,.?/~`"
+	numberChars      = "0123456789"
+	specialChars     = "!@#$%^&*()_+{}[]:;<>,.?/~`"
+	MaxLength        = 2048
 )
 
-func GeneratePassword(length int, enableSpecialChars bool, enableNumeric bool, enableCapital bool) string {
-	var chars string
-	chars += letterChars
-
-	if enableSpecialChars && len(specialChars) > 0 {
-		chars += specialChars
-	}
-
-	if enableNumeric && len(numberChars) > 0 {
-		chars += numberChars
-	}
-
-	if enableCapital && len(upperLetterChars) > 0 {
+func getCharacters(enableCapital bool, enableNumeric bool, enableSpecialChars bool) string {
+	chars := letterChars
+	if enableCapital {
 		chars += upperLetterChars
 	}
+	if enableNumeric {
+		chars += numberChars
+	}
+	if enableSpecialChars {
+		chars += specialChars
+	}
+	return chars
+}
+
+func GeneratePassword(length int, enableSpecialChars bool, enableNumeric bool, enableCapital bool) string {
+	if length > MaxLength {
+		length = MaxLength
+	}
+	chars := getCharacters(enableCapital, enableNumeric, enableSpecialChars)
 
 	rand.NewSource(time.Now().UnixNano())
 	password := make([]byte, length)
@@ -52,4 +57,3 @@ func GeneratePassword(length int, enableSpecialChars bool, enableNumeric bool, e
 
 	return string(password)
 }
-

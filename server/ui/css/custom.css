@@ -2,6 +2,7 @@
     color: inherit;
     /* Inherit the color from the parent */
     text-decoration: none !important;
+    width: 100%;
     /* Remove underline */
 }
 

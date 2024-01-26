@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <!-- Big Text Area -->
-                        <input disabled class="form-control" id="uuidField" value="{{.UUID}}">
+                        <input readonly class="form-control" id="uuidField" value="">
                         <!-- Copy Button -->
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="button" id="copyButton" data-toggle="tooltip"
@@ -20,7 +20,8 @@
         </div>
         <div class="row">
             <div class="text-center">
-                <button type="submit" id="submitButton" class="btn btn-primary btn-lg">Generate UUID</button>
+                <button type="button" onclick="generateUUID()" id="submitButton" class="btn btn-primary btn-lg">Generate
+                    UUID</button>
             </div>
         </div>
     </form>
@@ -28,34 +29,24 @@
 
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
+    function generateUUID() {
+        $.ajax({
+            url: "/api/uuid", type: 'get', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                $("#uuidField").val(data.data.uuid);
+            }, error: function (data) {
+                showAlert('Failed to generate UUID!');
+            }
+        })
+    }
     $(document).ready(function () {
-        // Initialize tooltip
-        $('[data-toggle="tooltip"]').tooltip();
-
+        generateUUID();
         // Add click event to the Copy button
         $("#copyButton").click(function () {
-            var input = $("#uuidField")[0];
-            input.focus();
-            input.select();
-
-            navigator.clipboard
-                .writeText(input.value)
-                .then(() => {
-                    // Show tooltip for a brief period
-                    $(this).text("Copied!");
-                    $(this).tooltip("show");
-
-                    // Hide tooltip after 1.5 seconds (adjust as needed)
-                    setTimeout(function () {
-                        $("#copyButton").tooltip("hide");
-                        $("#copyButton").text("Copy UUID!");
-                    }, 1500);
-                })
-                .catch(() => {
-                    alert("something went wrong");
-                });
-
-
+            copyToClipboard($("#uuidField")[0], $("#copyButton"));
         });
     });
 </script>

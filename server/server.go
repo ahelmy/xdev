@@ -2,14 +2,15 @@ package server
 
 import (
 	"embed"
-	"encoding/json"
+	"errors"
 	"io/fs"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
+	"github.com/ahelmy/xdev/api"
 	"github.com/ahelmy/xdev/app"
-	"github.com/ahelmy/xdev/internal"
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/filesystem"
 	"github.com/gofiber/fiber/v3/middleware/logger"
@@ -18,6 +19,7 @@ import (
 
 const (
 	Prefix       = "ui/"
+	APIPrefix    = "/api"
 	MainLayout   = Prefix + "layouts/main"
 	BasePath     = "ui"
 	JSONPath     = "/json"
@@ -29,6 +31,7 @@ const (
 	Base64Path   = "/base64"
 	URLPath      = "/url"
 	HashPath     = "/hash"
+	TimePath     = "/time"
 )
 
 //go:embed ui/*
@@ -43,13 +46,80 @@ var jsFS embed.FS
 //go:embed ui/img/*
 var imgFS embed.FS
 
+type Response struct {
+	Success bool        `json:"success"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+type JWTEncodeRequest struct {
+	Headers map[string]interface{} `json:"headers"`
+	Claims  map[string]interface{} `json:"claims"`
+	Secret  string                 `json:"secret"`
+}
+
+type JWTDecodeRequest struct {
+	JWT string `json:"jwt"`
+}
+
+type YamlRequest struct {
+	Yaml string `json:"yaml"`
+}
+
+type Base64Request struct {
+	String string `json:"string"`
+}
+
+type URLRequest struct {
+	URL string `json:"url"`
+}
+
+type HashRequest struct {
+	String string `json:"string"`
+}
+
+type EpochTimeRequest struct {
+	Epoch string `json:"epoch"`
+}
+
+type DateTimeRequest struct {
+	DateTime string `json:"datetime"`
+}
+
+var errorHandler = func(ctx fiber.Ctx, err error) error {
+	// Status code defaults to 500
+	code := fiber.StatusInternalServerError
+
+	// Retrieve the custom status code if it's a *fiber.Error
+	var e *fiber.Error
+	if errors.As(err, &e) {
+		code = e.Code
+	}
+	errorStr := ""
+	// Send custom error page
+	if err != nil {
+		errorStr = err.Error()
+	}
+	if strings.HasPrefix(ctx.Route().Path, APIPrefix) {
+		return ctx.JSON(Response{Success: false, Message: strconv.Itoa(code) + ": " + errorStr})
+	}
+	// Return from handler
+	return ctx.Render(Prefix+"error", newMap(map[string]any{
+		"ErrorCode":    code,
+		"ErrorMessage": errorStr,
+	}), MainLayout)
+}
+
 func newApp() *fiber.App {
 	engine := html.NewFileSystem(http.FS(uiFS), ".html")
-
-	return fiber.New(fiber.Config{
+	app := fiber.New(fiber.Config{
 		Views:          engine,
 		ReadBufferSize: 4096 * 3000,
+		// Override default error handler
+		ErrorHandler: errorHandler,
 	})
+	api.AddAPILayer(app)
+	return app
 }
 
 func newMap(fiberMap map[string]any) fiber.Map {
@@ -68,15 +138,16 @@ func StartServer(port int32, isVerbose bool) {
 	}
 	defineResources(app)
 	indexPage(app)
-	jsonPage(app)
 	uuidPage(app)
 	ulidPage(app)
 	passwordPage(app)
-	yamlPage(app)
 	jwtPage(app)
+	yamlPage(app)
+	jsonPage(app)
 	base64Page(app)
 	urlPage(app)
 	hashPage(app)
+	timePage(app)
 
 	log.Fatal(app.Listen(":"+strconv.FormatInt(int64(port), 10), fiber.ListenConfig{EnablePrefork: true}))
 }
@@ -89,47 +160,11 @@ func indexPage(app *fiber.App) {
 	})
 }
 
-func jsonPage(app *fiber.App) {
-	app.Get(JSONPath, func(c fiber.Ctx) error {
-		action := c.FormValue("action")
-		errorStr := ""
-		json := c.FormValue("json")
-		result := ""
-		if len(json) > 0 {
-			localResult := ""
-			err := error(nil)
-			switch action {
-			case "beautify":
-				localResult, err = internal.IndentJSON(json)
-			case "minify":
-				localResult, err = internal.MinifyJSON(json)
-			case "json2Yaml":
-				localResult, err = internal.Json2Yaml(json)
-			}
-			if err != nil {
-				errorStr = err.Error()
-			} else {
-				result = localResult
-			}
-		}
-
-		// Render index within layouts/main
-		return c.Render(Prefix+"json", newMap(map[string]any{
-			"Title":  "JSON",
-			"JSON":   c.FormValue("json"),
-			"Result": result,
-			"AlertMessage":  errorStr,
-			"action": action,
-		}), MainLayout)
-	})
-}
-
 func uuidPage(app *fiber.App) {
 	app.Get(UUIDPath, func(c fiber.Ctx) error {
 		// Render index within layouts/main
 		return c.Render(Prefix+"uuid", newMap(map[string]any{
 			"Title": "UUID Generator",
-			"UUID":  internal.GenerateGUID(),
 		}), MainLayout)
 	})
 }
@@ -139,197 +174,74 @@ func ulidPage(app *fiber.App) {
 		// Render index within layouts/main
 		return c.Render(Prefix+"ulid", newMap(map[string]any{
 			"Title": "ULID Generator",
-			"ULID":  internal.GenerateULID(),
 		}), MainLayout)
 	})
 }
-
 func passwordPage(app *fiber.App) {
 	app.Get(PasswordPath, func(c fiber.Ctx) error {
-		// Render index within layouts/main
-		length, err := strconv.Atoi(c.FormValue("length", "10"))
-		if err != nil {
-			length = 10
-		}
-		isEspecial := c.FormValue("especial") == "on"
-		isCapital := c.FormValue("capital") == "on"
-		isNumberic := c.FormValue("number") == "on"
-		capital := "on"
-		if !isCapital {
-			capital = "off"
-		}
-		especial := "on"
-		if !isEspecial {
-			especial = "off"
-		}
-		number := "on"
-		if !isNumberic {
-			number = "off"
-		}
-		password := internal.GeneratePassword(length, isEspecial, isNumberic, isCapital)
 		return c.Render(Prefix+"password", newMap(map[string]any{
-			"Title":    "Password Generator",
-			"Password": password,
-			"length":   length,
-			"especial": especial,
-			"capital":  capital,
-			"number":   number,
+			"Title": "Password Generator",
 		}), MainLayout)
 	})
 }
 
 func yamlPage(app *fiber.App) {
 	app.Get(YAMLPath, func(c fiber.Ctx) error {
-		action := c.FormValue("action")
-		errorStr := ""
-		yaml := c.FormValue("yaml")
-		result := ""
-		if len(yaml) > 0 {
-			if action == "yaml2JSON" {
-				_yaml, err := internal.Yaml2Json(yaml)
-				if err != nil {
-					errorStr = err.Error()
-				} else {
-					result = _yaml
-				}
-			}
-		}
-
 		// Render index within layouts/main
 		return c.Render(Prefix+"yaml", newMap(map[string]any{
-			"Title":  "YAML",
-			"YAML":   c.FormValue("yaml"),
-			"Result": result,
-			"AlertMessage":  errorStr,
-			"action": action,
+			"Title": "YAML",
+		}), MainLayout)
+	})
+}
+
+func jsonPage(app *fiber.App) {
+	app.Get(JSONPath, func(c fiber.Ctx) error {
+		// Render index within layouts/main
+		return c.Render(Prefix+"json", newMap(map[string]any{
+			"Title": "JSON",
 		}), MainLayout)
 	})
 }
 
 func jwtPage(app *fiber.App) {
 	app.Get(JWTPath, func(c fiber.Ctx) error {
-		action := c.FormValue("action")
-		header := c.FormValue("header")
-		claims := c.FormValue("claims")
-		secret := c.FormValue("secret")
-		jwtToken := c.FormValue("jwt")
-		jwt := internal.JWT{}
-		errorStr := ""
-		if action == "decode" {
-			_jwt, err := internal.DecodeJWT(jwtToken)
-			if err != nil {
-				errorStr = err.Error()
-			} else {
-				jwt = _jwt
-			}
-		} else if action == "encode" {
-			algorithm := "HS256"
-			// parse header
-			headerJson := map[string]string{}
-			json.Unmarshal([]byte(header), &headerJson)
-			if header != "" || headerJson["alg"] != "" {
-				algorithm = headerJson["alg"]
-			}
-			_jwt, err := internal.EncodeJWT(algorithm, claims, secret)
-			if err != nil {
-				errorStr = err.Error()
-			} else {
-				jwtToken = _jwt
-				jwt.Header, _ = internal.IndentJSON(header)
-				jwt.Claims, _ = internal.IndentJSON(claims)
-			}
-		}
-
-		// Render index within layouts/main
 		return c.Render(Prefix+"jwt", newMap(map[string]any{
-			"Title":  "JWT",
-			"JWT":    jwtToken,
-			"Header": jwt.Header,
-			"Claims": jwt.Claims,
-			"Secret": secret,
-			"AlertMessage":  errorStr,
+			"Title": "JWT",
 		}), MainLayout)
 	})
 }
 
 func base64Page(app *fiber.App) {
 	app.Get(Base64Path, func(c fiber.Ctx) error {
-		action := c.FormValue("action")
-
-		decoded := ""
-		encoded := ""
-		if action == "encode" {
-			encoded = internal.EncodeToBase64(c.FormValue("decoded"))
-			decoded = c.FormValue("decoded")
-		} else if action == "decode" {
-			decoded = internal.DecodeFromBase64(c.FormValue("encoded"))
-			encoded = c.FormValue("encoded")
-		}
-		errorStr := ""
-
 		// Render index within layouts/main
 		return c.Render(Prefix+"base64", newMap(map[string]any{
-			"Title":   "Base64 encode/decode",
-			"Decoded": decoded,
-			"Encoded": encoded,
-			"AlertMessage":   errorStr,
+			"Title": "Base64 encode/decode",
 		}), MainLayout)
 	})
 }
 
 func urlPage(app *fiber.App) {
 	app.Get(URLPath, func(c fiber.Ctx) error {
-		action := c.FormValue("action")
-
-		decoded := ""
-		encoded := ""
-		errorStr := ""
-
-		if action == "encode" {
-			encoded = internal.EncodeURL(c.FormValue("decoded"))
-			decoded = c.FormValue("decoded")
-		} else if action == "decode" {
-			_decoded, err := internal.DecodeURL(c.FormValue("encoded"))
-			if err != nil {
-				errorStr = err.Error()
-			} else {
-				decoded = _decoded
-			}
-			encoded = c.FormValue("encoded")
-		}
-
 		// Render index within layouts/main
 		return c.Render(Prefix+"url", newMap(map[string]any{
-			"Title":   "URL encode/decode",
-			"Decoded": decoded,
-			"Encoded": encoded,
-			"AlertMessage":   errorStr,
+			"Title": "URL encode/decode",
 		}), MainLayout)
 	})
 }
 
 func hashPage(app *fiber.App) {
 	app.Get(HashPath, func(c fiber.Ctx) error {
-		algorithm := c.FormValue("action")
-
-		str := c.FormValue("string")
-		result := ""
-		errorStr := ""
-		if len(str) > 0 {
-			_result, err := internal.HashString(str, algorithm)
-			if err != nil {
-				errorStr = err.Error()
-			} else {
-				result = _result
-			}
-		}
-
 		// Render index within layouts/main
 		return c.Render(Prefix+"hash", newMap(map[string]any{
-			"Title":  "Hashing",
-			"String": str,
-			"Result": result,
-			"AlertMessage":  errorStr,
+			"Title": "Hashing",
+		}), MainLayout)
+	})
+}
+
+func timePage(app *fiber.App) {
+	app.Get(TimePath, func(c fiber.Ctx) error {
+		return c.Render(Prefix+"time", newMap(map[string]any{
+			"Title": "Time Converter",
 		}), MainLayout)
 	})
 }

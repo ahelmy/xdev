@@ -21,6 +21,18 @@ func TestIndexPage(t *testing.T) {
 		t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
 	}
 
+	req = httptest.NewRequest(http.MethodGet, "/404", nil)
+	resp, err = app.Test(req)
+	if err != nil {
+		t.Fatalf("Failed to send test request: %v", err)
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/api/x", nil)
+	resp, err = app.Test(req)
+	if err != nil {
+		t.Fatalf("Failed to send test request: %v", err)
+	}
+
 	// TODO: Add more assertions for the response body or other expectations
 }
 
@@ -187,7 +199,7 @@ func TestJWTPage(t *testing.T) {
 	jwtPage(app)
 	t.Run("Test JWT Page", func(t *testing.T) {
 		// Create a test request to the "/jwt" route with jwt=...
-		req := httptest.NewRequest(http.MethodGet, "/jwt?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", nil)
+		req := httptest.NewRequest(http.MethodGet, "/jwt?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c&header=&claims=&secret=&action=decode", nil)
 		resp, err := app.Test(req)
 		if err != nil {
 			t.Fatalf("Failed to send test request: %v", err)
@@ -198,7 +210,7 @@ func TestJWTPage(t *testing.T) {
 			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
 		}
 
-		req = httptest.NewRequest(http.MethodGet, "/jwt?jwt=xyz", nil)
+		req = httptest.NewRequest(http.MethodGet, "/jwt?jwt=xyz&action=decode", nil)
 		resp, err = app.Test(req)
 		if err != nil {
 			t.Fatalf("Failed to send test request: %v", err)
@@ -218,6 +230,12 @@ func TestJWTPage(t *testing.T) {
 			}
 			if resp.StatusCode != http.StatusOK {
 				t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+			}
+
+			req = httptest.NewRequest(http.MethodGet, `/jwt?jwt=&header=&claims=&secret=&action=encode`, nil)
+			_, err = app.Test(req)
+			if err != nil {
+				t.Fatalf("Failed to send test request: %v", err)
 			}
 			// TODO: Add assertions for the response body or other expectations
 		})
@@ -406,5 +424,89 @@ func TestStartServer(t *testing.T) {
 
 	t.Run("Test Start server - verbose", func(t *testing.T) {
 		go StartServer(7000, true)
+	})
+}
+func TestTimePage(t *testing.T) {
+	app := newApp()
+	timePage(app)
+
+	t.Run("Test Time Page - Epoch", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=epoch and fromEpoch=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=epoch&fromEpoch=1234567890", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Epoch - Error", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=epoch and fromEpoch=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=epoch&fromEpoch=xyz", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Format", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=format and fromDateTime=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=format&fromDateTime=21-01-2024+21%3A03%3A56", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Format - Error", func(t *testing.T) {
+		// Create a test request to the "/time" route with action=format and fromDateTime=...
+		req := httptest.NewRequest(http.MethodGet, "/time?action=format&fromDateTime=21-2024+21%3A03%3A56", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
+	})
+
+	t.Run("Test Time Page - Default", func(t *testing.T) {
+		// Create a test request to the "/time" route without action and parameters
+		req := httptest.NewRequest(http.MethodGet, "/time", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+
+		// TODO: Add assertions for the response body or other expectations
 	})
 }
