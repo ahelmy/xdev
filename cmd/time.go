@@ -49,7 +49,7 @@ var timeCmd = &cobra.Command{
 		format := internal.ParseFormat(cmd.Flag("format").Value.String())
 		from := cmd.Flag("from").Value.String()
 		if len(args) == 0 {
-			fmt.Println(internal.Now(format))
+			fmt.Println(internal.Now(format, nil))
 			return
 		}
 		if from == "epoch" {
@@ -58,13 +58,13 @@ var timeCmd = &cobra.Command{
 				fmt.Println(err)
 				return
 			}
-			fmt.Println(internal.ConvertTimeFromEpoch(epoch, internal.ToDateFormat))
+			fmt.Println(internal.ConvertTimeFromEpoch(epoch, internal.ToDateFormat, nil))
 		} else {
 			if from == "" {
 				fmt.Println("Please specify the from format")
 				return
 			}
-			time, err := internal.ConvertTimeFromFormat(args[0], from, internal.ToDateFormat)
+			time, err := internal.ConvertTimeFromFormat(args[0], from, internal.ToDateFormat, nil)
 			if err != nil {
 				fmt.Println(err)
 				return

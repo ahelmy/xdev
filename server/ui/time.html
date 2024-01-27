@@ -64,7 +64,7 @@
     }
     function epcoh() {
         $.ajax({
-            url: "/api/time/epoch",
+            url: `/api/time/epoch?timezone=${_GetCurrentTimeZone()}`,
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
@@ -83,7 +83,7 @@
     }
     function datetime(){
         $.ajax({
-            url: "/api/time/datetime",
+            url: `/api/time/datetime?timezone=${_GetCurrentTimeZone()}`,
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
@@ -102,7 +102,7 @@
     }
     function now(){
         $.ajax({
-            url: "/api/time",
+            url: `/api/time?timezone=${_GetCurrentTimeZone()}`,
             type: 'get', 
             success: function (data) {
                 if (!data.success) {
@@ -118,4 +118,9 @@
     $(document).ready(function () {
         now();
     });
+
+    function _GetCurrentTimeZone()
+    {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
 </script>

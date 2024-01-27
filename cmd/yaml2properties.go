@@ -7,10 +7,10 @@ import (
 )
 
 var yaml2propertiesCmd = &cobra.Command{
-	Use:   "yaml2properties",
+	Use:     "yaml2properties",
 	Aliases: []string{"y2p"},
-	Short: "Convert YAML to Java Properties, Alias: y2p",
-	Long:  `Convert YAML to Java Properties`,
+	Short:   "Convert YAML to Java Properties, Alias: y2p",
+	Long:    `Convert YAML to Java Properties`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Please provide a YAML string.")
