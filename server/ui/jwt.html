@@ -14,16 +14,6 @@
 <div class="container mt-5">
     <form id="form">
         <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <button type="button" style="width: 100%;" class="btn btn-primary btn-block"
-                    onclick="decodeJWT()">Decode</button>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <button type="button" style="width: 100%;" class="btn btn-primary btn-block"
-                    onclick="encodeJWT()">Encode</button>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-12" style="height: 1px;"></div>
         </div>
         <div class="row">
@@ -33,7 +23,7 @@
                         Encoded token
                     </div>
                     <div class="card-body">
-                        <textarea class="form-control  no-outline" id="jwt" name="jwt" rows="30"></textarea>
+                        <textarea onkeyup="decodeJWT()" class="form-control  no-outline" id="jwt" name="jwt" rows="30"></textarea>
                     </div>
                 </div>
             </div>
@@ -45,7 +35,7 @@
                                 Header
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="header" name="header"
+                                <textarea class="form-control  no-outline" id="header" name="header" onkeyup="encodeJWT()"
                                     rows="4"></textarea>
                             </div>
                         </div>
@@ -58,7 +48,7 @@
                                 Payload
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="claims" name="claims"
+                                <textarea class="form-control  no-outline" id="claims" name="claims" onkeyup="encodeJWT()"
                                     rows="15"></textarea>
                             </div>
                         </div>
@@ -71,7 +61,7 @@
                                 Secret
                             </div>
                             <div class="card-body">
-                                <textarea class="form-control  no-outline" id="secret" name="secret"
+                                <textarea class="form-control  no-outline" id="secret" name="secret" onkeyup="encodeJWT()"
                                     rows="4"></textarea>
                             </div>
                         </div>
@@ -85,6 +75,7 @@
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
     function encodeJWT() {
+        clearAlert();
         try {
             headerJson = JSON.parse(document.headers.getValue());
         } catch (e) {
@@ -118,6 +109,9 @@
     }
 
     function decodeJWT() {
+        clearAlert();
+        if(document.jwt.getValue().length==0)
+            return;
         $.ajax({
             url: "/api/jwt/decode",
             contentType: "application/json",
@@ -145,6 +139,9 @@
         });
         document.jwt = jwt;
         jwt.focus();
+        jwt.on("keyup", function () {
+            decodeJWT();
+        });
 
         var header = CodeMirror.fromTextArea(document.getElementById("header"), {
             mode: "javascript",
@@ -152,11 +149,17 @@
             lineWrapping: true
         });
         header.setValue(JSON.stringify({ alg: "HS256", typ: "JWT" }, null, 2));
+        header.on("keyup", function () {
+            encodeJWT();
+        });
         document.headers = header;
         var claims = CodeMirror.fromTextArea(document.getElementById("claims"), {
             mode: "javascript",
             lineNumbers: false,
             lineWrapping: true
+        });
+        claims.on("keyup", function () {
+            encodeJWT();
         });
         claims.setValue(JSON.stringify({}, null, 2));
         document.claims = claims;

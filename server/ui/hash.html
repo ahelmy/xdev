@@ -41,6 +41,7 @@
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
     function hash(algorithm) {
+        clearAlert();
         $.ajax({
             url: `/api/hash?algorithm=${algorithm}`,
             contentType: "application/json",

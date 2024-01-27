@@ -21,6 +21,6 @@
 go.work
 
 .vscode/
-
+.idea/
 coverage.txt
 coverage.html

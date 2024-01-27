@@ -1,9 +1,11 @@
 package internal
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v3"
 )
 
 func TestYaml2JSON(t *testing.T) {
@@ -84,4 +86,10 @@ func TestYaml2Properties(t *testing.T) {
 			assert.Equal(t, tt.expectedProperty, result)
 		})
 	}
+
+	t.Run("write properties - invalid kind", func(t *testing.T) {
+		builder := &strings.Builder{}
+		writeProperties(builder, "xyz", &yaml.Node{Kind: yaml.DocumentNode})
+		assert.Equal(t, "", builder.String())
+	})
 }

@@ -45,6 +45,7 @@
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
     function encodeBase64() {
+        clearAlert();
         $.ajax({
             url: "/api/base64?action=encode",
             contentType: "application/json",
@@ -64,6 +65,7 @@
         });
     }
     function decodeBase64() {
+        clearAlert();
         $.ajax({
             url: "/api/base64?action=decode",
             contentType: "application/json",

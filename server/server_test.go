@@ -510,3 +510,21 @@ func TestTimePage(t *testing.T) {
 		// TODO: Add assertions for the response body or other expectations
 	})
 }
+
+func TestPropertiesPage(t *testing.T) {
+	app := newApp()
+	propertiesPage(app)
+
+	t.Run("Test Properties Page - Properties to YAML", func(t *testing.T) {
+		// Create a test request to the "/properties" route with action=properties2Yaml and properties=...
+		req := httptest.NewRequest(http.MethodGet, "/properties?action=properties2Yaml&properties=...", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+	})
+}

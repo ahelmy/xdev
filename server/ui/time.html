@@ -63,6 +63,7 @@
         $("#timezone").html(time.your_timezone);
     }
     function epcoh() {
+        clearAlert();
         $.ajax({
             url: `/api/time/epoch?timezone=${_GetCurrentTimeZone()}`,
             contentType: "application/json",
@@ -82,6 +83,7 @@
         });        
     }
     function datetime(){
+        clearAlert();
         $.ajax({
             url: `/api/time/datetime?timezone=${_GetCurrentTimeZone()}`,
             contentType: "application/json",

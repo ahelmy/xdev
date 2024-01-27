@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNow(t *testing.T) {
@@ -158,4 +160,29 @@ func TestTimeString(t *testing.T) {
 	if result != expectedString {
 		t.Errorf("Expected string %s, but got %s", expectedString, result)
 	}
+}
+
+func TestTimeError(t *testing.T) {
+	t.Run("Test Time Error", func(t *testing.T) {
+		tz := "xyz"
+		_, err := Now("dd-MM-yyyy", &tz)
+		if err != nil {
+			t.Errorf("Expected error, but got nil")
+		}
+	})
+
+	t.Run("Test Convert Time From Epoch Error", func(t *testing.T) {
+		tz := "xyz"
+		time := ConvertTimeFromEpoch(1625097600, ParseFormat("dd-MM-yyyy"), &tz)
+		assert.Equal(t, "01-07-2021", time.UTC)
+	})
+
+	t.Run("Test Convert Time From Format Error", func(t *testing.T) {
+		tz := "xyz"
+		_, err := ConvertTimeFromFormat("2022-01-01 10:00:00", ParseFormat("yyyy-MM-dd HH:mm:ss"), "dd-MM-yyyy", &tz)
+		if err != nil {
+			t.Errorf("Expected error, but got nil")
+		}
+	})
+
 }

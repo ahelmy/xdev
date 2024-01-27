@@ -43,6 +43,7 @@
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
     function encodeURL() {
+        clearAlert();
         $.ajax({
             url: "/api/url?action=encode",
             contentType: "application/json",
@@ -62,6 +63,7 @@
         });
     }
     function decodeURL() {
+        clearAlert();
         $.ajax({
             url: "/api/url?action=decode",
             contentType: "application/json",

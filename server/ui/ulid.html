@@ -29,6 +29,7 @@
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
     function generateULID() {
+        clearAlert();
         $.ajax({
             url: "/api/ulid", type: 'get', success: function (data) {
                 if (!data.success) {

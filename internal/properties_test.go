@@ -1,8 +1,9 @@
 package internal
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestProperties2Yaml(t *testing.T) {
@@ -42,4 +43,21 @@ func TestProperties2Yaml(t *testing.T) {
 			assert.Equal(t, tt.expectedYaml, result)
 		})
 	}
+}
+
+func TestPropertiesErrors(t *testing.T) {
+	t.Run("Invalid Properties", func(t *testing.T) {
+		_, err := Properties2Yaml("x[0=aaa")
+		if err != nil {
+			t.Errorf("Unexpected error status. Got error: %v, expected error: %v", err, false)
+		}
+	})
+
+	t.Run("Invalid Properties - invalid array key", func(t *testing.T) {
+		_, err := Properties2Yaml("x[yz]=aaa")
+		if err == nil {
+			t.Errorf("Unexpected error status. Got error: %v, expected error: %v", err, false)
+		}
+	})
+
 }

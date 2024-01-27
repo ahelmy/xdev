@@ -67,6 +67,7 @@
 <!-- Your custom script for copying text and showing tooltip -->
 <script>
     function applyJsonAction(action) {
+        clearAlert();
         $.ajax({
             url: `/api/json?action=${action}`,
             data: document.json.getValue(), type: 'post', success: function (data) {

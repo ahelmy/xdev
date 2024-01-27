@@ -3,8 +3,9 @@ package internal
 import (
 	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 func Yaml2Json(yamlString string) (string, error) {
@@ -29,58 +30,49 @@ func Yaml2Properties(yamlData string) (string, error) {
 
 	// Write Properties
 	var propertiesBuilder strings.Builder
-	err = writeProperties(&propertiesBuilder, "", yamlNode.Content[0])
-	if err != nil {
-		return "", err
-	}
+	writeProperties(&propertiesBuilder, "", yamlNode.Content[0])
 
 	return propertiesBuilder.String(), nil
 }
 
-func writeProperties(builder *strings.Builder, prefix string, node *yaml.Node) error {
-
-	// invalid yaml
+func writeProperties(builder *strings.Builder, prefix string, node *yaml.Node) {
 	if node.Kind != yaml.MappingNode {
-		return fmt.Errorf("expected a MappingNode, got %v", node.Kind)
+		return
 	}
 
-	// This loop iterates over the key-value pairs in the YAML mapping.
-	// It increments by 2 because each pair of nodes in the 'Content' slice represents a key-value pair.
-	// 'i' is the index of the key node and 'i+1' is the index of the value node.
 	for i := 0; i < len(node.Content); i += 2 {
 		keyNode, valueNode := node.Content[i], node.Content[i+1]
 
-		var fullKey string
-		if prefix == "" {
-			fullKey = keyNode.Value
-		} else {
-			fullKey = fmt.Sprintf("%v.%v", prefix, keyNode.Value)
-		}
+		fullKey := getFullKey(prefix, keyNode.Value)
 
 		switch valueNode.Kind {
 		case yaml.MappingNode:
-			// Recursively write nested maps
-			err := writeProperties(builder, fullKey, valueNode)
-			if err != nil {
-				return err
-			}
+			writeNestedMaps(builder, fullKey, valueNode)
 		case yaml.SequenceNode:
-			// Handle lists
-			for i, element := range valueNode.Content {
-				_, err := fmt.Fprintf(builder, "%s[%d]=%v\n", fullKey, i, element.Value)
-				if err != nil {
-					return err
-				}
-			}
-
+			writeSequence(builder, fullKey, valueNode)
 		default:
-			// Write key-value pairs
-			_, err := fmt.Fprintf(builder, "%s=%v\n", fullKey, valueNode.Value)
-			if err != nil {
-				return err
-			}
+			writeKeyValue(builder, fullKey, valueNode.Value)
 		}
 	}
+}
 
-	return nil
+func getFullKey(prefix, key string) string {
+	if prefix == "" {
+		return key
+	}
+	return fmt.Sprintf("%v.%v", prefix, key)
+}
+
+func writeNestedMaps(builder *strings.Builder, prefix string, node *yaml.Node) {
+	writeProperties(builder, prefix, node)
+}
+
+func writeSequence(builder *strings.Builder, prefix string, node *yaml.Node) {
+	for i, element := range node.Content {
+		builder.WriteString(fmt.Sprintf("%s[%d]=%v\n", prefix, i, element.Value))
+	}
+}
+
+func writeKeyValue(builder *strings.Builder, key, value string) {
+	builder.WriteString(fmt.Sprintf("%s=%v\n", key, value))
 }

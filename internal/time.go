@@ -53,11 +53,16 @@ func Now(format string, timeZone *string) (Time, error) {
 		return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}, nil
 	}
 
+	var yourTZ string
+
 	location, err := time.LoadLocation(*timeZone)
 	if err != nil {
-		return Time{}, err
+		yourTZ = t.Format(format)
+	} else {
+		yourTZ = t.In(location).Format(format)
 	}
-	return Time{UTC: t.UTC().Format(format), YourTimezone: t.In(location).Format(format), Epoch: t.Unix()}, nil
+
+	return Time{UTC: t.UTC().Format(format), YourTimezone: yourTZ, Epoch: t.Unix()}, nil
 }
 
 func ConvertTimeFromEpoch(epoch int64, format string, timeZone *string) Time {
@@ -67,12 +72,16 @@ func ConvertTimeFromEpoch(epoch int64, format string, timeZone *string) Time {
 		return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
 	}
 
+	var yourTZ string
+
 	location, err := time.LoadLocation(*timeZone)
 	if err != nil {
-		return Time{}
+		yourTZ = t.Format(format)
+	} else {
+		yourTZ = t.In(location).Format(format)
 	}
 
-	return Time{UTC: t.UTC().Format(format), YourTimezone: t.In(location).Format(format), Epoch: t.Unix()}
+	return Time{UTC: t.UTC().Format(format), YourTimezone: yourTZ, Epoch: t.Unix()}
 }
 
 func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string, timeZone *string) (Time, error) {
@@ -85,10 +94,14 @@ func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string, 
 		return Time{UTC: t.UTC().Format(toFormat), YourTimezone: t.Format(toFormat), Epoch: t.Unix()}, nil
 	}
 
+	var yourTZ string
+
 	location, err := time.LoadLocation(*timeZone)
 	if err != nil {
-		return Time{}, err
+		yourTZ = t.Format(toFormat)
+	} else {
+		yourTZ = t.In(location).Format(toFormat)
 	}
 
-	return Time{UTC: t.UTC().Format(toFormat), YourTimezone: t.In(location).Format(toFormat), Epoch: t.Unix()}, nil
+	return Time{UTC: t.UTC().Format(toFormat), YourTimezone: yourTZ, Epoch: t.Unix()}, nil
 }

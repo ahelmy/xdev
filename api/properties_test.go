@@ -63,5 +63,21 @@ func TestPropertiesAPI(t *testing.T) {
 		assert.NoError(t, err)
 		assert.False(t, response.Success)
 	})
+	t.Run("Properties2Yaml Error", func(t *testing.T) {
+		propertiesRequest := PropertiesRequest{
+			Properties: "x\n",
+		}
+		requestBody, _ := json.Marshal(propertiesRequest)
 
+		req := httptest.NewRequest(http.MethodPost, "/api/properties", bytes.NewReader(requestBody))
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := app.Test(req)
+		assert.NoError(t, err)
+		assert.Equal(t, http.StatusOK, resp.StatusCode)
+
+		var response Response
+		err = json.NewDecoder(resp.Body).Decode(&response)
+		assert.NoError(t, err)
+		assert.False(t, response.Success)
+	})
 }

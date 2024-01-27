@@ -13,6 +13,11 @@ const showAlert = (message, type = 'danger') => {
     alertPlaceholder.append(wrapper);
 }
 
+const clearAlert = () => {
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    alertPlaceholder.innerHTML = '';
+}
+
 const copyToClipboard = (input, copyButton) => {
     input.focus();
     input.select();
