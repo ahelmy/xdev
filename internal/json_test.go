@@ -3,10 +3,12 @@ package internal
 import (
 	"testing"
 )
+
 const (
-	EXPECTED_ERROR = "Expected error '%s', but got:\n%s"
+	EXPECTED_ERROR   = "Expected error '%s', but got:\n%s"
 	UNEXPECTED_ERROR = "Unexpected error: %v"
 )
+
 func TestIndentJSON(t *testing.T) {
 	input := `{"name":"John","age":30,"city":"New York"}`
 	expectedOutput := `{

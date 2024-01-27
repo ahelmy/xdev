@@ -60,15 +60,35 @@ func Now(format string, timeZone *string) (Time, error) {
 	return Time{UTC: t.UTC().Format(format), YourTimezone: t.In(location).Format(format), Epoch: t.Unix()}, nil
 }
 
-func ConvertTimeFromEpoch(epoch int64, format string) Time {
+func ConvertTimeFromEpoch(epoch int64, format string, timeZone *string) Time {
 	t := time.Unix(epoch, 0)
-	return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
+
+	if timeZone == nil {
+		return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
+	}
+
+	location, err := time.LoadLocation(*timeZone)
+	if err != nil {
+		return Time{}
+	}
+
+	return Time{UTC: t.UTC().Format(format), YourTimezone: t.In(location).Format(format), Epoch: t.Unix()}
 }
 
-func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string) (Time, error) {
+func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string, timeZone *string) (Time, error) {
 	t, err := time.ParseInLocation(fromFormat, datetime, time.Local)
 	if err != nil {
 		return Time{}, err
 	}
-	return Time{UTC: t.UTC().Format(toFormat), YourTimezone: t.Format(toFormat), Epoch: t.Unix()}, nil
+
+	if timeZone == nil {
+		return Time{UTC: t.UTC().Format(toFormat), YourTimezone: t.Format(toFormat), Epoch: t.Unix()}, nil
+	}
+
+	location, err := time.LoadLocation(*timeZone)
+	if err != nil {
+		return Time{}, err
+	}
+
+	return Time{UTC: t.UTC().Format(toFormat), YourTimezone: t.In(location).Format(toFormat), Epoch: t.Unix()}, nil
 }

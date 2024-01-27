@@ -31,7 +31,8 @@ func timeAPI(app *fiber.App) {
 		if err != nil {
 			return c.JSON(Response{Success: false, Message: err.Error()})
 		}
-		time := internal.ConvertTimeFromEpoch(epoch, internal.ToDateFormat)
+		var timeZone = c.Query("timezone")
+		time := internal.ConvertTimeFromEpoch(epoch, internal.ToDateFormat, &timeZone)
 		return c.JSON(Response{Success: true, Data: map[string]interface{}{"time": time}})
 	})
 	app.Post(APIPrefix+TimePath+"/datetime", func(c fiber.Ctx) error {
@@ -40,7 +41,8 @@ func timeAPI(app *fiber.App) {
 		if err != nil {
 			return c.JSON(Response{Success: false, Message: err.Error()})
 		}
-		time, err := internal.ConvertTimeFromFormat(dateTimeRequest.DateTime, internal.ParseFormat("dd-MM-yyyy HH:mm:ss"), internal.ToDateFormat)
+		var timeZone = c.Query("timezone")
+		time, err := internal.ConvertTimeFromFormat(dateTimeRequest.DateTime, internal.ParseFormat("dd-MM-yyyy HH:mm:ss"), internal.ToDateFormat, &timeZone)
 		if err != nil {
 			return c.JSON(Response{Success: false, Message: err.Error()})
 		}

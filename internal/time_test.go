@@ -13,7 +13,7 @@ func TestNow(t *testing.T) {
 	expectedYourTimezone := time.Now().Format(format)
 	expectedEpoch := time.Now().Unix()
 
-	result := Now(format)
+	result, _ := Now(format, nil)
 
 	// Check the UTC time
 	if result.UTC != expectedUTC {
@@ -40,7 +40,7 @@ func TestConvertTimeFromEpoch(t *testing.T) {
 	expectedYourTimezone := expected.Local().Format(format) // Replace with your expected time in your timezone
 	expectedEpoch := expected.Local().Unix()                // Replace with your expected epoch value
 
-	result := ConvertTimeFromEpoch(epoch, format)
+	result := ConvertTimeFromEpoch(epoch, format, nil)
 
 	// Check the UTC time
 	if result.UTC != expectedUTC {
@@ -62,12 +62,12 @@ func TestConvertTimeFromFormat(t *testing.T) {
 	toFormat := "01-02-2006 15:04:05"
 	format := ParseFormat("yyyy-MM-dd HH:mm:ss")
 
-	expected, _ := time.ParseInLocation(format, datetime, time.Local)               // Check if the expected UTC time is valid
-	expectedUTC := expected.UTC().Format(toFormat)            // Replace with your expected UTC time
-	expectedYourTimezone := expected.Local().Format(toFormat) // Replace with your expected time in your timezone
+	expected, _ := time.ParseInLocation(format, datetime, time.Local) // Check if the expected UTC time is valid
+	expectedUTC := expected.UTC().Format(toFormat)                    // Replace with your expected UTC time
+	expectedYourTimezone := expected.Local().Format(toFormat)         // Replace with your expected time in your timezone
 	expectedEpoch := expected.Local().Unix()
 
-	result, err := ConvertTimeFromFormat(datetime, format, toFormat)
+	result, err := ConvertTimeFromFormat(datetime, format, toFormat, nil)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
@@ -87,7 +87,7 @@ func TestConvertTimeFromFormat(t *testing.T) {
 		t.Errorf("Expected epoch value %d, but got %d", expectedEpoch, result.Epoch)
 	}
 
-	result, err = ConvertTimeFromFormat("xyz", "123", toFormat)
+	result, err = ConvertTimeFromFormat("xyz", "123", toFormat, nil)
 	if err == nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
