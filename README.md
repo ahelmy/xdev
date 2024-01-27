@@ -179,7 +179,7 @@ If you are interested to fix an issue or to add new feature, you can just open a
 
 ### Contributors
 <a href = "https://github.com/ahelmy/xdev/graphs/contributors">
-  <img src = "https://contrib.rocks/image?repo=ahelmy/xdev2"/>
+  <img src = "https://contrib.rocks/image?repo=ahelmy/xdev"/>
 </a>
 
 
