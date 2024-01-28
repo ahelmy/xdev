@@ -65,7 +65,7 @@
     function epcoh() {
         clearAlert();
         $.ajax({
-            url: `/api/time/epoch?timezone=${_GetCurrentTimeZone()}`,
+            url: `/api/time/epoch?timezone=${encodeURIComponent(_GetCurrentTimeZone())}`,
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
@@ -85,7 +85,7 @@
     function datetime(){
         clearAlert();
         $.ajax({
-            url: `/api/time/datetime?timezone=${_GetCurrentTimeZone()}`,
+            url: `/api/time/datetime?timezone=${encodeURIComponent(_GetCurrentTimeZone())}`,
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
@@ -104,7 +104,7 @@
     }
     function now(){
         $.ajax({
-            url: `/api/time?timezone=${_GetCurrentTimeZone()}`,
+            url: `/api/time?timezone=${encodeURIComponent(_GetCurrentTimeZone())}`,
             type: 'get', 
             success: function (data) {
                 if (!data.success) {
@@ -123,6 +123,24 @@
 
     function _GetCurrentTimeZone()
     {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+        let differentBetweenTimeInCurrentZoneAndUTCInMinutes = new Date().getTimezoneOffset() * -1;
+        let timeInHoursAndMinutes = _ConvertMinutesToHoursAndMinutes(differentBetweenTimeInCurrentZoneAndUTCInMinutes);
+        let operator = '+';
+
+        if (timeInHoursAndMinutes.hours < 0)
+        {
+            operator = '-';
+            timeInHoursAndMinutes.hours = timeInHoursAndMinutes.hours * -1;
+        }
+
+        return `UTC${operator}${timeInHoursAndMinutes.hours.toString().padStart(2, '0')}:${timeInHoursAndMinutes.minutes.toString().padStart(2, '0')}`;
+    }
+
+    function _ConvertMinutesToHoursAndMinutes(totalMinutes)
+    {
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        return { hours, minutes };
     }
 </script>

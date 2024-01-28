@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -53,14 +54,14 @@ func Now(format string, timeZone *string) (Time, error) {
 		return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}, nil
 	}
 
-	var yourTZ string
+	var yourTZ = getCurrentTimeFromUTCDifferent(t, *timeZone).Format(format)
 
-	location, err := time.LoadLocation(*timeZone)
-	if err != nil {
-		yourTZ = t.Format(format)
-	} else {
-		yourTZ = t.In(location).Format(format)
-	}
+	/*	location, err := time.LoadLocation(*timeZone)
+		if err != nil {
+			yourTZ = t.Format(format)
+		} else {
+			yourTZ = t.In(location).Format(format)
+		}*/
 
 	return Time{UTC: t.UTC().Format(format), YourTimezone: yourTZ, Epoch: t.Unix()}, nil
 }
@@ -72,14 +73,14 @@ func ConvertTimeFromEpoch(epoch int64, format string, timeZone *string) Time {
 		return Time{UTC: t.UTC().Format(format), YourTimezone: t.Format(format), Epoch: t.Unix()}
 	}
 
-	var yourTZ string
+	var yourTZ = getCurrentTimeFromUTCDifferent(t, *timeZone).Format(format)
 
-	location, err := time.LoadLocation(*timeZone)
-	if err != nil {
-		yourTZ = t.Format(format)
-	} else {
-		yourTZ = t.In(location).Format(format)
-	}
+	/*	location, err := time.LoadLocation(*timeZone)
+		if err != nil {
+			yourTZ = t.Format(format)
+		} else {
+			yourTZ = t.In(location).Format(format)
+		}*/
 
 	return Time{UTC: t.UTC().Format(format), YourTimezone: yourTZ, Epoch: t.Unix()}
 }
@@ -94,14 +95,29 @@ func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string, 
 		return Time{UTC: t.UTC().Format(toFormat), YourTimezone: t.Format(toFormat), Epoch: t.Unix()}, nil
 	}
 
-	var yourTZ string
+	var yourTZ = getCurrentTimeFromUTCDifferent(t, *timeZone).Format(toFormat)
 
-	location, err := time.LoadLocation(*timeZone)
-	if err != nil {
-		yourTZ = t.Format(toFormat)
-	} else {
-		yourTZ = t.In(location).Format(toFormat)
-	}
+	/*	location, err := time.LoadLocation(*timeZone)
+		if err != nil {
+			yourTZ = t.Format(toFormat)
+		} else {
+			yourTZ = t.In(location).Format(toFormat)
+		}*/
 
 	return Time{UTC: t.UTC().Format(toFormat), YourTimezone: yourTZ, Epoch: t.Unix()}, nil
+}
+
+func getCurrentTimeFromUTCDifferent(utcTime time.Time, timeZone string) time.Time {
+	timeZone = timeZone[3:len(timeZone)] // remove UTC From String
+	var operator = timeZone[:1]
+	var hours, _ = strconv.Atoi(timeZone[1:3])
+	var minutes, _ = strconv.Atoi(timeZone[4:6])
+
+	if operator == "+" {
+		utcTime = utcTime.UTC().Add(time.Hour*time.Duration(hours) + time.Minute*time.Duration(minutes))
+	} else {
+		utcTime = utcTime.UTC().Add((time.Hour*time.Duration(hours) + time.Minute*time.Duration(minutes)) * -1)
+	}
+
+	return utcTime
 }
