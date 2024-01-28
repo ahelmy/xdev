@@ -1,7 +1,7 @@
 
 <p  align="center">
 
-<img  src="logo-slogan.png"  width="256"/>
+<img  src="assets/logo-slogan.png"  width="256"/>
 
 </p>
 
@@ -9,9 +9,7 @@
 
 # X development tools
 
-[![](https://dcbadge.vercel.app/api/server/HwBWUSRUew)](https://discord.com/invite/HwBWUSRUew)
-
-[![codecov](https://codecov.io/gh/ahelmy/xdev/graph/badge.svg?token=INCX6KXGD7)](https://codecov.io/gh/ahelmy/xdev)
+[![](https://dcbadge.vercel.app/api/server/HwBWUSRUew)](https://discord.com/invite/HwBWUSRUew) [![codecov](https://codecov.io/gh/ahelmy/xdev/graph/badge.svg?token=INCX6KXGD7)](https://codecov.io/gh/ahelmy/xdev)
 
   
 
@@ -32,135 +30,61 @@ XDev helps with daily development tasks like formatting JSON, base64 encoding / 
   
 
 - [Installation](#installation)
-
-  
-
 - [Development](#development)
-
-  
-
 - [Usage](#usage)
-
 - [Architecture](#architecture)
-
 - [Docker](#docker)
-
-  
-
 - [Web UI](#web-ui)
-
-  
-
-- [Features](#features)
-
-  
-
+- [Features](#features) 
 - [Contributing](#contributing)
-
-  
-
 - [License](#license)
+ 
 
-  
-
-  
-
-## Installation
-
-  
-
-  
+## Installation 
 
 1. Clone the repository:
-
-  
+ 
 
 ```shell
-
-  
-
 git  clone  https://github.com/ahelmy/xdev.git
-
-  
-
 ```
-
-  
-
-  
 
 2. Navigate to the project directory:
 
-  
 
 ```shell
-
-  
-
 cd  xdev
-
-  
-
 ```
-
-  
-
-  
+ 
 
 3. Build from source:
 
-  
 
-```shell
-
-  
-
+```shell 
 go  build  -o  xdev
-
-  
-
-```
-
-  
-
-  
+```  
 
 4. Start the application:
 
-  
-
 ```shell
-
-  
-
 ./xdev
-
-  
-
 ```
 
-  
 
 ## Development
-
   
-
 Requirements:
 
 - go >= 1.20
 
-  
 
 ## Usage
 
-  
 
 You can use it directly by:
 
 ```shell
-
-go  install  github.com/ahelmy/xdev@latest
-
+go  install  github.com/ahelmy/xdev@main
 ```
 
   
@@ -168,74 +92,40 @@ go  install  github.com/ahelmy/xdev@latest
 if `go/bin` is not in your path, either add it or use `~/go/bin`
 
 ```shell
-
 xdev  -h
-
 ```
-
   
-
 ```shell
-
-Developer  Swiss  Army  Knife  tools  X  for  anything.
-
-  
+Developer Swiss Army Knife tools X for anything.
 
 Usage:
+  xdev [flags]
+  xdev [command]
 
-xdev [flags]
-
-xdev [command]
-
-  
-
-Available  Commands:
-
-base64decoder  Decode  base64  string.  Alias:  b64d
-
-base64encoder  Encode  string  to  base64.  Alias:  b64e
-
-completion  Generate  the  autocompletion  script  for  the  specified  shell
-
-hash  Hash  a  string
-
-help  Help  about  any  command
-
-json  JSON  indentation  and  minification
-
-json2yaml  Convert  JSON  to  YAML.  Alias:  j2y
-
-jwt  Decode  or  encode  a  JWT  string.
-
-password  Password  generator.  Alias:  pwd
-
-properties2yaml  Convert  Java  Properties  to  YAML,  Alias:  p2y
-
-server  Start  a  web  server,  Alias:  s
-
-time Time command to covert and manupulate time
-
-ulid  Generate  a  ulid  string
-
-url  URL  encode/decode.
-
-uuid  Generate  a  uuid  string
-
-yaml2json  Convert  YAML  to  JSON.  Alias:  y2j
-
-yaml2properties  Convert  YAML  to  Java  Properties,  Alias:  y2p
-
-  
+Available Commands:
+  base64decoder   Decode base64 string. Alias: b64d
+  base64encoder   Encode string to base64. Alias: b64e
+  completion      Generate the autocompletion script for the specified shell
+  hash            Hash a string
+  help            Help about any command
+  json            JSON indentation and minification
+  json2yaml       Convert JSON to YAML. Alias: j2y
+  jwt             Decode or encode a JWT string.
+  password        Password generator. Alias: pwd
+  properties2yaml Convert Java Properties to YAML, Alias: p2y
+  server          Start a web server, Alias: s
+  time            Time command to covert and manupulate time
+  ulid            Generate a ulid string
+  url             URL encode/decode.
+  uuid            Generate a uuid string
+  yaml2json       Convert YAML to JSON. Alias: y2j
+  yaml2properties Convert YAML to Java Properties, Alias: y2p
 
 Flags:
+  -h, --help      help for xdev
+  -v, --version   Print the version number
 
--h,  --help  help  for  xdev
-
--v,  --version  Print  the  version  number
-
-  
-
-Use  "xdev [command] --help"  for  more  information  about  a  command.
+Use "xdev [command] --help" for more information about a command.
 
 ```
 
@@ -277,53 +167,21 @@ List of features:
   
 
 - [X] UUID, ULID Generator
-
-  
-
 - [X] JWT encoding / decoding
-
-  
-
 - [X] Base64 encoding / decoding
-
-  
-
 - [X] JSON indention / minifying
-
-  
-
 - [X] Password generator
-
-  
-
 - [X] JSON to Yaml
-
-  
-
 - [X] Yaml to JSON
-
-  
-
 - [X] URL encoding / decoding
-
-  
-
 - [X] Add hashing (SHA256, MD5, ...)
-
-  
-
 - [X] Time conversion
-
-  
-
 - [X] Yaml2Properties
 
-  
 
 **Next**
 
 - [ ] Text differences.
-
 - [ ] Add `choco`, `brew` and `linux` package managers download.  
 
 ...
