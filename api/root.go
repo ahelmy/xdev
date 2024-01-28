@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	APIPrefix = "/api"
+	APIPrefix       = "/api"
+	healthCheckPath = "/health"
 )
 
 type Response struct {
@@ -15,6 +16,7 @@ type Response struct {
 }
 
 func AddAPILayer(app *fiber.App) {
+	healthCheck(app)
 	uuidAPI(app)
 	ulidAPI(app)
 	passwordAPI(app)
@@ -26,4 +28,10 @@ func AddAPILayer(app *fiber.App) {
 	hashAPI(app)
 	timeAPI(app)
 	propertiesAPI(app)
+}
+
+func healthCheck(app *fiber.App) {
+	app.Get(APIPrefix+healthCheckPath, func(c fiber.Ctx) error {
+		return c.JSON(Response{Success: true, Message: "OK"})
+	})
 }
