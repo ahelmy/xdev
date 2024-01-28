@@ -34,6 +34,7 @@ XDev helps with daily development tasks like formatting JSON, base64 encoding / 
 - [Usage](#usage)
 - [Architecture](#architecture)
 - [Docker](#docker)
+- [Kuberenetes](#kuberenetes)
 - [Web UI](#web-ui)
 - [Features](#features) 
 - [Contributing](#contributing)
@@ -148,7 +149,23 @@ If you want to use `Xdev` as server running in docker container you can use http
 
 -  `VERBOSE` To enable verbose mode.
 
-  
+## Kuberenetes
+
+Healthcheck endpoint for liveness & readiness
+`GET /api/health`
+
+```
+readinessProbe:
+  httpGet:
+    path: /api/health
+ initialDelaySeconds: 10
+ periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /api/health
+  initialDelaySeconds: 10
+  periodSeconds: 10
+```
 
 ## Web UI
 
