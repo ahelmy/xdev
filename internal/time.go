@@ -108,10 +108,21 @@ func ConvertTimeFromFormat(datetime string, fromFormat string, toFormat string, 
 }
 
 func getCurrentTimeFromUTCDifferent(utcTime time.Time, timeZone string) time.Time {
+
+	if !strings.Contains(timeZone, "UTC") {
+		return utcTime
+	}
+
 	timeZone = timeZone[3:len(timeZone)] // remove UTC From String
 	var operator = timeZone[:1]
-	var hours, _ = strconv.Atoi(timeZone[1:3])
-	var minutes, _ = strconv.Atoi(timeZone[4:6])
+	var hours, err = strconv.Atoi(timeZone[1:3])
+	if err != nil {
+		return utcTime
+	}
+	var minutes, err2 = strconv.Atoi(timeZone[4:6])
+	if err2 != nil {
+		return utcTime
+	}
 
 	if operator == "+" {
 		utcTime = utcTime.UTC().Add(time.Hour*time.Duration(hours) + time.Minute*time.Duration(minutes))
