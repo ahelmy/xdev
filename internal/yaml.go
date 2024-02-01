@@ -21,6 +21,9 @@ func Yaml2Json(yamlString string) (string, error) {
 }
 
 func Yaml2Properties(yamlData string) (string, error) {
+	if yamlData == "" {
+		return "", nil
+	}
 	// Parse YAML into a Node
 	var yamlNode yaml.Node
 	err := yaml.Unmarshal([]byte(yamlData), &yamlNode)

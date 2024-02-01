@@ -29,10 +29,7 @@ func Properties2Yaml(propertiesData string) (string, error) {
 	}
 
 	// Convert map to YAML
-	yamlData, err := yaml.Marshal(dataMap)
-	if err != nil {
-		return "", err
-	}
+	yamlData, _ := yaml.Marshal(dataMap)
 
 	return string(yamlData), nil
 }
