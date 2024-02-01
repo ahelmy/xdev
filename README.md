@@ -118,7 +118,7 @@ Available Commands:
   time            Time command to covert and manupulate time
   ulid            Generate a ulid string
   url             URL encode/decode.
-  uuid            Generate a uuid string
+  uuid            Generate a uuid string, and uuid conversion
   yaml2json       Convert YAML to JSON. Alias: y2j
   yaml2properties Convert YAML to Java Properties, Alias: y2p
 
@@ -183,7 +183,7 @@ List of features:
 
   
 
-- [X] UUID, ULID Generator
+- [X] UUID, ULID Generator, conversion
 - [X] JWT encoding / decoding
 - [X] Base64 encoding / decoding
 - [X] JSON indention / minifying
