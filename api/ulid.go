@@ -14,4 +14,24 @@ func ulidAPI(app *fiber.App) {
 		ulidResponse := Response{Success: true, Data: map[string]interface{}{"ulid": internal.GenerateULID()}}
 		return c.JSON(ulidResponse)
 	})
+
+	app.Get(APIPrefix+ULIDPath+"/convert", func(c fiber.Ctx) error {
+		ulid := c.Query("ulid", "")
+		if ulid == "" {
+			return c.JSON(Response{Success: false, Message: "ulid is required"})
+		}
+
+		convertTo := c.Query("to", "uuid")
+		var convertedString string
+		if convertTo == "uuid" {
+			uuid, err := internal.ULIDtoUUID(ulid)
+			if err != nil {
+				return c.JSON(Response{Success: false, Message: err.Error()})
+			}
+			convertedString = uuid
+		} else {
+			return c.JSON(Response{Success: false, Message: "invalid conversion type"})
+		}
+		return c.JSON(Response{Success: true, Data: map[string]interface{}{"result": convertedString}})
+	})
 }

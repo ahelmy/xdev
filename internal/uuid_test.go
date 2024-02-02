@@ -31,3 +31,57 @@ func TestUUIDtoULID(t *testing.T) {
 		}
 	})
 }
+
+func TestToUpperCase(t *testing.T) {
+	t.Run("Lowercase string", func(t *testing.T) {
+		input := "hello world"
+		expected := "HELLO WORLD"
+		result := toUpperCase(input)
+		if result != expected {
+			t.Errorf("Expected result to be %s, but got %s", expected, result)
+		}
+	})
+
+	t.Run("Uppercase string", func(t *testing.T) {
+		input := "HELLO WORLD"
+		expected := "HELLO WORLD"
+		result := toUpperCase(input)
+		if result != expected {
+			t.Errorf("Expected result to be %s, but got %s", expected, result)
+		}
+	})
+
+	t.Run("Mixed case string", func(t *testing.T) {
+		input := "HeLlO WoRlD"
+		expected := "HELLO WORLD"
+		result := toUpperCase(input)
+		if result != expected {
+			t.Errorf("Expected result to be %s, but got %s", expected, result)
+		}
+	})
+}
+
+func TestCrockfordDecode(t *testing.T) {
+	t.Run("Valid input", func(t *testing.T) {
+		input := "A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S9T"
+		expected := []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF, 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF}
+		result, err := crockfordDecode(input)
+		if err == nil {
+			t.Errorf("Expected result length to be %d, but got %d", len(expected), len(result))
+		}
+		for i := 0; i < len(result); i++ {
+			if result[i] != expected[i] {
+				t.Errorf("Expected result[%d] to be %d, but got %d", i, expected[i], result[i])
+			}
+		}
+	})
+
+	t.Run("Invalid input", func(t *testing.T) {
+		input := "A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6Q7R8S9T!"
+		_, err := crockfordDecode(input)
+		if err == nil {
+			t.Errorf("Expected error, but got nil")
+		}
+	})
+
+}

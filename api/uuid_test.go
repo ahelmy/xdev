@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -40,7 +39,7 @@ func TestUUIDAPI(t *testing.T) {
 			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
 		}
 
-		body, _ := ioutil.ReadAll(resp.Body)
+		body, _ := io.ReadAll(resp.Body)
 		var result Response
 		json.Unmarshal(body, &result)
 

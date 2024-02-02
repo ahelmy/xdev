@@ -23,6 +23,43 @@
                 <button type="button" id="submitButton" onclick="generateULID()" class="btn btn-primary btn-lg">Generate ULID</button>
             </div>
         </div>
+        <hr> 
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="inputULIDField" class="form-label">ULID</label>
+                    <div class="input-group">
+                        <input class="form-control" id="inputULIDField" value="">
+                        <!-- Copy Button -->
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button" id="copyInputULIDButton" data-toggle="tooltip"
+                                data-placement="top" title="Copy ULID!">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="inputUUIDField" class="form-label">UUID</label>
+                    <div class="input-group">
+                        <input class="form-control" id="inputUUIDField" value="">
+                        <!-- Copy Button -->
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button" id="copyInputUUIDButton" data-toggle="tooltip"
+                                data-placement="top" title="Copy UUID!">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <button type="button" onclick="convertToUUID()" id="submitButton" class="btn btn-primary btn-lg">Convert to UUID</button>
+            </div>
+        </div>
     </form>
 </div>
 
@@ -42,11 +79,35 @@
             }
         });
     }
+    function convertToUUID() {
+        ulid = $("#inputULIDField").val()
+        if (ulid == "") {
+            return;
+        }
+        clearAlert();
+        $.ajax({
+            url: `/api/ulid/convert?to=uuid&ulid=${ulid.trim()}`, type: 'get', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                $("#inputUUIDField").val(data.data.result);
+            }, error: function (data) {
+                showAlert('Failed to generate ULID!');
+            }
+        })
+    }
     $(document).ready(function () {
         generateULID();
         // Add click event to the Copy button
         $("#copyButton").click(function () {
             copyToClipboard($("#ulidField")[0], $("#copyButton"));
+        });
+        $("#copyInputUUIDButton").click(function () {
+            copyToClipboard($("#inputUUIDField")[0], $("#copyInputUUIDButton"));
+        });
+        $("#copyInputULIDButton").click(function () {
+            copyToClipboard($("#inputULIDField")[0], $("#copyInputULIDButton"));
         });
     });
 </script>

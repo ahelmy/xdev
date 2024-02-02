@@ -3,6 +3,7 @@ package internal
 import (
 	"bytes"
 	"encoding/hex"
+	"errors"
 	"strings"
 
 	"github.com/google/uuid"
@@ -64,4 +65,54 @@ func reverseBuffer(input []byte) []byte {
 		reversed[i] = input[length-i-1]
 	}
 	return reversed
+}
+
+func reverseString(s string) string {
+	var result []rune
+	for i := len(s) - 1; i >= 0; i-- {
+		result = append(result, rune(s[i]))
+	}
+	return string(result)
+}
+
+func crockfordDecode(input string) ([]byte, error) {
+	sanitizedInput := toUpperCase(input)
+
+	// Work from the end
+	sanitizedInput = reverseString(sanitizedInput)
+
+	var output []byte
+	var bitsRead, buffer uint
+	for _, char := range sanitizedInput {
+		byteVal := byte(strings.Index(B32_CHARACTERS, string(char)))
+		if byteVal == 255 {
+			return nil, errors.New("Invalid base 32 character found in string: " + string(char))
+		}
+
+		buffer |= uint(byteVal) << bitsRead
+		bitsRead += 5
+
+		for bitsRead >= 8 {
+			output = append([]byte{byte(buffer & 0xff)}, output...)
+			buffer >>= 8
+			bitsRead -= 8
+		}
+	}
+
+	if bitsRead >= 5 || buffer > 0 {
+		output = append([]byte{byte(buffer & 0xff)}, output...)
+	}
+
+	return output, nil
+}
+
+func toUpperCase(s string) string {
+	var result []rune
+	for _, char := range s {
+		if char >= 'a' && char <= 'z' {
+			char -= 'a' - 'A'
+		}
+		result = append(result, char)
+	}
+	return string(result)
 }
