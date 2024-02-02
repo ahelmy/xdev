@@ -16,13 +16,28 @@ var ulidCmd = &cobra.Command{
 	Short: "Generate a ulid string",
 	Long:  `Generate a ulid string. For example:`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(internal.GenerateULID())
+		if len(args) == 0 {
+			fmt.Println(internal.GenerateULID())
+		} else {
+			to := cmd.Flag("to").Value.String()
+			switch to {
+			case "uuid":
+				ulid, err := internal.ULIDtoUUID(args[0])
+				if err != nil {
+					fmt.Println(err)
+				} else {
+					fmt.Println(ulid)
+				}
+			default:
+				fmt.Println("Unknown conversion")
+			}
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(ulidCmd)
-
+	ulidCmd.Flags().StringP("to", "t", "ulid", "Convert from ulid to (uuid)")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
