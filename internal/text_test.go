@@ -40,7 +40,7 @@ func TestCompareTexts(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := CompareText(tt.txt1, tt.txt2)
+			result := CompareText(tt.txt1, tt.txt2, false)
 			assert.Equal(t, tt.expected, result)
 		})
 	}

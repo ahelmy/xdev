@@ -259,8 +259,8 @@ func propertiesPage(app *fiber.App) {
 }
 func compareTextPage(app *fiber.App) {
 	app.Get(TextsPath, func(c fiber.Ctx) error {
-		return c.Render(Prefix+"text_diff", newMap(map[string]any{
-			"Title": "Text Diff",
+		return c.Render(Prefix+"text", newMap(map[string]any{
+			"Title": "Text BS",
 		}), MainLayout)
 	})
 

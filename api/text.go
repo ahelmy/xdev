@@ -11,8 +11,9 @@ const (
 )
 
 type CompareRequest struct {
-	Text1 string `json:"text1"`
-	Text2 string `json:"text2"`
+	Text1     string `json:"text1"`
+	Text2     string `json:"text2"`
+	CheckLine bool   `json:"check_line"`
 }
 
 func compareTextAPI(app *fiber.App) {
@@ -23,7 +24,7 @@ func compareTextAPI(app *fiber.App) {
 		if err != nil {
 			return c.JSON(Response{Success: false, Message: err.Error()})
 		}
-		diffs := internal.CompareText(req.Text1, req.Text2)
+		diffs := internal.CompareText(req.Text1, req.Text2, req.CheckLine)
 
 		res := Response{
 			Success: true, Data: map[string]interface{}{"diffs": diffs}}

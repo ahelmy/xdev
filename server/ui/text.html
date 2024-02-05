@@ -1,0 +1,231 @@
+<script src="/js/codemirror.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/javascript.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/yaml.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/properties.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/indent-fold.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/brace-fold.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/foldcode.min.js" crossorigin="anonymous"></script>
+<script src="/js/codemirror/addon/foldgutter.min.js" crossorigin="anonymous"></script>
+<link href="/css/foldgutter.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<style>
+    .no-outline {
+        outline: none;
+    }
+
+    .result-control {
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #212529;
+        vertical-align: middle;
+        background-color: white;
+        border: 1px solid #ced4da;
+        border: none;
+        border-radius: .25rem;
+        overflow-y: auto;
+        height: 350px;
+        word-wrap: break-word;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px; /* Reduced size */
+        height: 20px; /* Reduced size */
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px; /* Reduced size */
+        width: 16px; /* Reduced size */
+        left: 2px; /* Adjusted position */
+        bottom: 2px; /* Adjusted position */
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(20px); /* Adjusted translation */
+        -ms-transform: translateX(20px); /* Adjusted translation */
+        transform: translateX(20px); /* Adjusted translation */
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .fas.fa-question-circle {
+        color: gray;
+        vertical-align: middle;
+        padding-bottom: 6px;
+    }
+</style>
+<div class="container mt-5">
+    <form id="form">
+        <div class="row">
+            <div class="col-lg-5 col-sm-12">
+                <div class="card" style="min-height: 460px;max-height:460px">
+                    <div class="card-header">
+                        Text 1
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control no-outline" id="text1" name="text1" rows="30"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-sm-12">
+                <div class="card" style="min-height: 460px;max-height:460px">
+                    <div class="card-header">
+                        Text 2
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control no-outline" id="text2" name="text2" rows="30"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-sm-12">
+                <div class="row g-2">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary btn-block" onclick="compareTexts()">Compare
+                        </button>
+                    </div>
+                    <div class="col-12 d-flex align-items-center">
+                        <label class="switch">
+                            <input type="checkbox" id="checkLines">
+                            <span class="slider round"></span>
+                        </label>
+                        <label for="checkLines" style="margin-left: 10px; font-size: 0.9rem;">
+                            Check Lines
+                        </label>
+                        <!-- Question mark icon -->
+                        <i class="fas fa-question-circle ml-2" style="cursor: pointer;" data-toggle="modal"
+                           data-target="#infoModal"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Modal -->
+            <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="infoModalLabel">Check Lines Information</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            The Check Lines option allows you to perform a line-level diff initially before a
+                            character-level diff. This can significantly improve performance for large texts with small
+                            changes.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12">&nbsp;</div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-sm-12">
+                <div class="card" style="min-height: 460px;max-height:460px">
+                    <div class="card-header">
+                        Result
+                    </div>
+                    <div class="card-body">
+                        <div class="form-control no-outline result-control" id="result" rows="30"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function compareTexts() {
+        clearAlert();
+        var checkLines = document.getElementById('checkLines').checked;
+        $.ajax({
+            url: "/api/text",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                text1: document.text1.getValue(),
+                text2: document.text2.getValue(),
+                check_lines: checkLines
+            }),
+            type: 'post', success: function (data) {
+                if (!data.success) {
+                    showAlert(data.message);
+                    return;
+                }
+                document.getElementById('result').innerHTML = data.data.diffs;
+            }, error: function (data) {
+                showAlert('Failed to compare texts!');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        var text1 = CodeMirror.fromTextArea(document.getElementById("text1"), {
+            lineNumbers: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            foldGutter: true,
+            lineWrapping: true
+        });
+        document.text1 = text1;
+
+        var text2 = CodeMirror.fromTextArea(document.getElementById("text2"), {
+            lineNumbers: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            foldGutter: true,
+            lineWrapping: true
+        });
+        document.text2 = text2;
+    });
+</script>
