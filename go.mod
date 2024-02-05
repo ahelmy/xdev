@@ -9,6 +9,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/itchyny/json2yaml v0.1.4
 	github.com/oklog/ulid/v2 v2.1.0
+	github.com/sergi/go-diff v1.3.1
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/crypto v0.18.0

@@ -28,6 +28,7 @@ func AddAPILayer(app *fiber.App) {
 	hashAPI(app)
 	timeAPI(app)
 	propertiesAPI(app)
+	compareTextAPI(app)
 }
 
 func healthCheck(app *fiber.App) {

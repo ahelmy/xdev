@@ -528,3 +528,21 @@ func TestPropertiesPage(t *testing.T) {
 		}
 	})
 }
+
+func TestCompareTextPage(t *testing.T) {
+	app := newApp()
+	compareTextPage(app)
+
+	t.Run("Test Compare Text Page", func(t *testing.T) {
+		// Create a test request to the "/text-comparer" route
+		req := httptest.NewRequest(http.MethodGet, "/text-comparer", nil)
+		resp, err := app.Test(req)
+		if err != nil {
+			t.Fatalf("Failed to send test request: %v", err)
+		}
+		// Check the response status code
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+		}
+	})
+}

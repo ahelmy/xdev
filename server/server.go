@@ -18,21 +18,22 @@ import (
 )
 
 const (
-	Prefix       = "ui/"
-	APIPrefix    = "/api"
-	MainLayout   = Prefix + "layouts/main"
-	BasePath     = "ui"
-	JSONPath     = "/json"
-	YAMLPath     = "/yaml"
-	JWTPath      = "/jwt"
-	UUIDPath     = "/uuid"
-	ULIDPath     = "/ulid"
-	PasswordPath = "/password"
-	Base64Path   = "/base64"
-	URLPath      = "/url"
-	HashPath     = "/hash"
-	TimePath     = "/time"
-	Properties   = "/properties"
+	Prefix         = "ui/"
+	APIPrefix      = "/api"
+	MainLayout     = Prefix + "layouts/main"
+	BasePath       = "ui"
+	JSONPath       = "/json"
+	YAMLPath       = "/yaml"
+	JWTPath        = "/jwt"
+	UUIDPath       = "/uuid"
+	ULIDPath       = "/ulid"
+	PasswordPath   = "/password"
+	Base64Path     = "/base64"
+	URLPath        = "/url"
+	HashPath       = "/hash"
+	TimePath       = "/time"
+	PropertiesPath = "/properties"
+	TextsPath      = "/text"
 )
 
 //go:embed ui/*
@@ -150,7 +151,7 @@ func StartServer(port int32, isVerbose bool) {
 	hashPage(app)
 	timePage(app)
 	propertiesPage(app)
-
+	compareTextPage(app)
 	log.Fatal(app.Listen(":"+strconv.FormatInt(int64(port), 10), fiber.ListenConfig{EnablePrefork: true}))
 }
 
@@ -249,9 +250,17 @@ func timePage(app *fiber.App) {
 }
 
 func propertiesPage(app *fiber.App) {
-	app.Get(Properties, func(c fiber.Ctx) error {
+	app.Get(PropertiesPath, func(c fiber.Ctx) error {
 		return c.Render(Prefix+"properties", newMap(map[string]any{
 			"Title": "Properties",
+		}), MainLayout)
+	})
+
+}
+func compareTextPage(app *fiber.App) {
+	app.Get(TextsPath, func(c fiber.Ctx) error {
+		return c.Render(Prefix+"text", newMap(map[string]any{
+			"Title": "Text BS",
 		}), MainLayout)
 	})
 
