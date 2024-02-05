@@ -16,9 +16,9 @@ func TestCompareTextAPI(t *testing.T) {
 
 	t.Run("Valid Request", func(t *testing.T) {
 		compareRequest := CompareRequest{
-			Text1:      "text",
-			Text2:      "text bro",
-			CheckLines: false,
+			Text1:     "text",
+			Text2:     "text bro",
+			CheckLine: false,
 		}
 		reqBody, _ := json.Marshal(compareRequest)
 
